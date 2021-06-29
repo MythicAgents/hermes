@@ -25,4 +25,4 @@ Now, you might be wondering _when_ should you or a user do this to properly add 
 
 ## Thank you
 
-Venus icon made by [Freepik](https://www.flaticon.com/authors/freepik)
+Hermes icon made by [Freepik](https://www.flaticon.com/authors/freepik)
