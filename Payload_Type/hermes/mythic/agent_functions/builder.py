@@ -62,10 +62,11 @@ class Hermes(PayloadType):
 
             for key, val in c2.get_parameters_dict().items():
                 if key == "headers":
-                    if "Host" in val:
-                        host_header = val["Host"]
-                    if "User-Agent" in val:
-                        user_agent = val["User-Agent"]
+                    hl = val
+                    hl = {n["key"]:n["value"] for n in hl}
+                    user_agent = hl["User-Agent"]
+                    if "Host" in hl:
+                        host_header = hl["Host"]
 
             # check if callback host is using SSL
             use_ssl = "false"
