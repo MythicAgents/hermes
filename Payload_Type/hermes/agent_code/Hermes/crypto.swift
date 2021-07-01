@@ -9,7 +9,6 @@ import Foundation
 
 // https://stackoverflow.com/questions/39820602/using-secrandomcopybytes-in-swift
 func generateIV() -> Data {
-
     var keyData = Data(count: 16)
     let result = keyData.withUnsafeMutableBytes {
         (mutableBytes: UnsafeMutablePointer<UInt8>) -> Int32 in

