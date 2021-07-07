@@ -14,13 +14,18 @@ func rm(job: Job) {
         var path = jsonParameters["path"].stringValue
         
         // Strip out quotes if they exist, concept from Apfell agent
-        let fileURL = URL(fileURLWithPath: path)
         if (path.prefix(1) == "\"") {
             path.removeFirst()
             path.removeLast()
         }
         
+        // Check if ~ to base search from user home directory
+        if (path.prefix(1) == "~") {
+            path = NSString(string: path).expandingTildeInPath
+        }
+        
         // Delete file
+        let fileURL = URL(fileURLWithPath: path)
         try FileManager.default.removeItem(at: fileURL)
         
         let jsonPayload = JSON([

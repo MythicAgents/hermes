@@ -181,6 +181,8 @@ func executeTask(job: Job, jobList: JobList) {
         if job.uploadTotalChunks >= 1 {
             upload(job: job)
         }
+    case "clipboard":
+        clipboard(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F5B3A0F26962D7B00C84927 /* clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A0E26962D7B00C84927 /* clipboard.swift */; };
 		3F9D52062679EA2B00227EED /* download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D52052679EA2B00227EED /* download.swift */; };
 		3F9D5208268126C100227EED /* upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D5207268126C100227EED /* upload.swift */; };
 		3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA25266DD15A00C2E539 /* pwd.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F5B3A0E26962D7B00C84927 /* clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clipboard.swift; sourceTree = "<group>"; };
 		3F9D52052679EA2B00227EED /* download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = download.swift; sourceTree = "<group>"; };
 		3F9D5207268126C100227EED /* upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upload.swift; sourceTree = "<group>"; };
 		3FAAFA25266DD15A00C2E539 /* pwd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pwd.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				3F9D5207268126C100227EED /* upload.swift */,
+				3F5B3A0E26962D7B00C84927 /* clipboard.swift */,
 				3F9D52052679EA2B00227EED /* download.swift */,
 				3FAAFA3D266DD32900C2E539 /* rm.swift */,
 				3FAAFA3B266DD30700C2E539 /* ls.swift */,
@@ -232,6 +235,7 @@
 				3FD51048266161E700DCD9F8 /* SwiftyJSON.swift in Sources */,
 				3F9D52062679EA2B00227EED /* download.swift in Sources */,
 				3FAAFA2E266DD24400C2E539 /* run.swift in Sources */,
+				3F5B3A0F26962D7B00C84927 /* clipboard.swift in Sources */,
 				3FAAFA3E266DD32900C2E539 /* rm.swift in Sources */,
 				3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */,
 				3FD51026265B277400DCD9F8 /* config.swift in Sources */,
