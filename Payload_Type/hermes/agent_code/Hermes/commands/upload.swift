@@ -9,29 +9,38 @@ import Foundation
 
 func upload(job: Job) {
     do {
-        // Convert json to path
-        let jsonParameters = try JSON(data: toData(string: job.parameters))
-        var path = jsonParameters["path"].stringValue
-        
-        // Strip out quotes if they exist, concept from Apfell agent
-        let fileURL = URL(fileURLWithPath: path)
-        if (path.prefix(1) == "\"") {
-            path.removeFirst()
-            path.removeLast()
+        if job.uploadTotalChunks == 1 {
+            try fromBase64(data: job.uploadData).write(to: URL(fileURLWithPath: job.uploadFullPath))
+            job.result = "Upload of \(job.uploadFullPath) complete"
+            job.completed = true
+            job.success = true
         }
-        
-        // Delete file
-        try FileManager.default.removeItem(at: fileURL)
-        
-        let jsonPayload = JSON([
-            "host": Host.current().localizedName!,
-            "path": path,
-        ])
-        
-        job.removedFiles = jsonPayload
-        job.result = "\(path) was removed"
-        job.completed = true
-        job.success = true
+        else if job.uploadTotalChunks > 1 && (job.uploadChunkNumber <= job.uploadTotalChunks) {
+            let fileManager = FileManager.default
+            let decodedData = fromBase64(data: job.uploadData)
+            
+            if !fileManager.fileExists(atPath: job.uploadFullPath) {
+                fileManager.createFile(atPath: job.uploadFullPath, contents: decodedData, attributes: nil)
+            }
+            else {
+                let fileHandle = FileHandle(forWritingAtPath: job.uploadFullPath)
+                fileHandle?.seekToEndOfFile()
+                fileHandle?.write(decodedData)
+                fileHandle?.closeFile()
+            }
+        }
+        else if job.uploadTotalChunks < job.uploadChunkNumber {
+            let fileHandle = FileHandle(forWritingAtPath: job.uploadFullPath)
+            let decodedData = fromBase64(data: job.uploadData)
+            
+            fileHandle?.seekToEndOfFile()
+            fileHandle?.write(decodedData)
+            fileHandle?.closeFile()
+            
+            job.result = "Upload of \(job.uploadFullPath) complete"
+            job.completed = true
+            job.success = true
+        }
     }
     catch {
         job.result = "Exception caught: \(error)"

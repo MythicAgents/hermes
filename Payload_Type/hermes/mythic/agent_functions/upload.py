@@ -14,7 +14,7 @@ class UploadArguments(TaskArguments):
             "remote_path": CommandParameter(
                 name="remote_path",
                 type=ParameterType.String,
-                description="/remote/path/on/victim.txt",
+                description="/full/path/on/victim.txt",
             ),
         }
 
@@ -33,7 +33,7 @@ class UploadCommand(CommandBase):
     needs_admin = False
     help_cmd = "upload"
     description = (
-        "Upload a file to the target machine by selecting a file from your computer. "
+        "Upload a file to the target machine by selecting a file from your computer."
     )
     version = 1
     supported_ui_features = ["file_browser:upload"]

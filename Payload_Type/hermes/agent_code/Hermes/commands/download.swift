@@ -31,12 +31,12 @@ func getFileID(job: Job) {
                 let size = attributes[FileAttributeKey.size] as! Float
                 let totalChunks = Int(ceil(size/512000))
                 
-                job.fileSize = Int(size)
-                job.chunkNumber = 1
-                job.totalChunks = totalChunks
-                job.fullPath = path
-                job.isScreenshot = false
-                job.host = ""
+                job.downloadFileSize = Int(size)
+                job.downloadChunkNumber = 1
+                job.downloadTotalChunks = totalChunks
+                job.downloadFullPath = path
+                job.downloadIsScreenshot = false
+                job.downloadHost = ""
                 job.result = ""
             }
             else {
@@ -63,41 +63,34 @@ func getFileID(job: Job) {
 }
 
 func downloadChunk(job: Job) {
-    do {
-        // Open file for reading
-        let fileHandle = FileHandle(forReadingAtPath: job.fullPath)
+    // Open file for reading
+    let fileHandle = FileHandle(forReadingAtPath: job.downloadFullPath)
+    
+    // This will start at 0, then go to 512000, and so on
+    let offset = UInt64((job.downloadChunkNumber - 1) * 512000)
+    
+    // Use seek to move to appropriate position within the file
+    fileHandle?.seek(toFileOffset: offset)
+    
+    // Read as much data as possible 512kb until the last chunk
+    if job.downloadChunkNumber < job.downloadTotalChunks {
+        // Read data and convert to b64
+        let data = (fileHandle?.readData(ofLength: 512000) ?? toData(string: " ")) as Data
+        let b64Data = toBase64(data: data)
         
-        // This will start at 0, then go to 512000, and so on
-        let offset = UInt64((job.chunkNumber - 1) * 512000)
-        
-        // Use seek to move to appropriate position within the file
-        try fileHandle?.seek(toFileOffset: offset)
-        
-        // Read as much data as possible 512kb until the last chunk
-        if job.chunkNumber < job.totalChunks {
-            // Read data and convert to b64
-            let data = (fileHandle?.readData(ofLength: 512000) ?? toData(string: " ")) as Data
-            let b64Data = toBase64(data: data)
-            
-            job.chunkData = b64Data
-        }
-        // Last chunk read only the remaining data
-        else if job.chunkNumber == job.totalChunks {
-            // Read remainder data and convert to b64
-            let length = job.fileSize - Int(offset)
-            let data = (fileHandle?.readData(ofLength: length) ?? toData(string: " ")) as Data
-            let b64Data = toBase64(data: data)
-            
-            job.chunkData = b64Data
-            job.result = "Download complete"
-            job.completed = true
-            job.success = true
-        }
+        job.downloadChunkData = b64Data
     }
-    catch {
-        job.result = "Exception caught: \(error)"
+    // Last chunk read only the remaining data
+    else if job.downloadChunkNumber == job.downloadTotalChunks {
+        // Read remainder data and convert to b64
+        let length = job.downloadFileSize - Int(offset)
+        let data = (fileHandle?.readData(ofLength: length) ?? toData(string: " ")) as Data
+        let b64Data = toBase64(data: data)
+        
+        job.downloadChunkData = b64Data
+        job.result = "Download complete"
         job.completed = true
-        job.success = false
-        job.status = "error"
+        job.success = true
     }
+    
 }
