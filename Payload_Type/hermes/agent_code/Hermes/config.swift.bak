@@ -30,7 +30,7 @@ struct AgentConfig {
 
 var agentConfig = AgentConfig(
     payloadUUID: "REPLACE_PAYLOAD_UUID",
-    encodedAESKey: "REPLACE_ENCOED_AES_KEY",
+    encodedAESKey: "REPLACE_ENCODED_AES_KEY",
     
     callbackHost: "REPLACE_CALLBACK_HOST",
     getRequestURI: "REPLACE_GET_REQUEST_URI",
