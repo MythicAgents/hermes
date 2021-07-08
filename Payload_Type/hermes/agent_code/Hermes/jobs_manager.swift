@@ -20,7 +20,7 @@ class Job {
     var thread: Thread?
     var processes = [JSON]()
     var fileBrowser: JSON
-    var removedFiles: JSON
+    var removedFiles = [JSON]()
     // download
     var downloadChunkNumber: Int
     var downloadTotalChunks: Int
@@ -49,7 +49,6 @@ class Job {
         self.started = false
         self.success = false
         self.fileBrowser = [:]
-        self.removedFiles = [:]
         self.downloadChunkNumber = 0
         self.downloadTotalChunks = 0
         self.downloadFullPath = ""

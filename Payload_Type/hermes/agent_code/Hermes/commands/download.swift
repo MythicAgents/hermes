@@ -92,5 +92,4 @@ func downloadChunk(job: Job) {
         job.completed = true
         job.success = true
     }
-    
 }

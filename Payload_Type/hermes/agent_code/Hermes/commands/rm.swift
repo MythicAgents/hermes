@@ -24,19 +24,28 @@ func rm(job: Job) {
             path = NSString(string: path).expandingTildeInPath
         }
         
-        // Delete file
-        let fileURL = URL(fileURLWithPath: path)
-        try FileManager.default.removeItem(at: fileURL)
-        
-        let jsonPayload = JSON([
-            "host": Host.current().localizedName!,
-            "path": path,
-        ])
-        
-        job.removedFiles = jsonPayload
-        job.result = "\(path) was removed"
-        job.completed = true
-        job.success = true
+        var isDir : ObjCBool = false
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: path, isDirectory:&isDir) {
+            // Delete file/folder
+            let fileURL = URL(fileURLWithPath: path)
+            try FileManager.default.removeItem(at: fileURL)
+            
+            let jsonPayload = JSON([
+                "host": Host.current().localizedName!,
+                "path": fileURL.path,
+            ])
+            job.removedFiles.append(jsonPayload)
+            job.result = "\(path) was removed"
+            job.completed = true
+            job.success = true
+        }
+        else {
+            job.result = "Folder/file does not exist"
+            job.completed = true
+            job.success = false
+            job.status = "error"
+        }
     }
     catch {
         job.result = "Exception caught: \(error)"
