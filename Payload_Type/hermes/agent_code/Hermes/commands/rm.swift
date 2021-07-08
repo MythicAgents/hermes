@@ -36,7 +36,7 @@ func rm(job: Job) {
                 "path": fileURL.path,
             ])
             job.removedFiles.append(jsonPayload)
-            job.result = "\(path) was removed"
+            job.result = "\(fileURL.path) was removed"
             job.completed = true
             job.success = true
         }
