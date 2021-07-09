@@ -207,7 +207,7 @@ func executeTask(job: Job, jobList: JobList) {
         }
         // Successfully looped through all displays
         else {
-            job.result = "Screenshot complete"
+            job.result = ""
             job.completed = true
             job.success = true
         }
