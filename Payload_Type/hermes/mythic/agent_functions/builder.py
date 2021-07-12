@@ -41,9 +41,7 @@ class Hermes(PayloadType):
 
         # get version parameter from Mythic
         target_version = self.get_parameter("version")
-
-        
-
+git statu
         try:
             # Copy backup config to config.swift, open it for reading, read data
             agent_config_bak_path = "/Mythic/agent_code/Hermes/config.swift.bak"
@@ -52,21 +50,31 @@ class Hermes(PayloadType):
             config_file = open(agent_config_path, "rt")
             data = config_file.read()
 
-            # pull user agent and host header from c2info
+            # pull user agent, host header, and custom headers from c2info
             user_agent = ""
             host_header = ""
+            http_headers = ""
             
             # get c2 profile
             c2 = self.c2info[0]
             profile = c2.get_c2profile()["name"]
 
+            # parse user agent, host header, and custom headers
             for key, val in c2.get_parameters_dict().items():
                 if key == "headers":
                     hl = val
                     hl = {n["key"]:n["value"] for n in hl}
-                    user_agent = hl["User-Agent"]
-                    if "Host" in hl:
-                        host_header = hl["Host"]
+                    for key,value in hl.items:
+                        if "User-Agent" in key:
+                            user_agent = value
+                        elif "Host" in key:
+                            host_header = value
+                        else:
+                            http_headers += f'"{key}"' + ":" + f'"{value}"' + ","#"key1":"value1","key2":"value2"
+            
+            # strip trailing comma out of http_headers
+            if http_headers[-1] == ",":
+                http_headers = http_headers[:-1]
 
             # check if callback host is using SSL
             use_ssl = "false"
@@ -87,6 +95,7 @@ class Hermes(PayloadType):
             data = data.replace("REPLACE_USER_AGENT", user_agent)
             data = data.replace("REPLACE_HOST_HEADER", host_header)
             data = data.replace("REPLACE_USE_SSL", use_ssl)
+            data = data.replace("REPLACE_HTTP_HEADERS", http_headers)
             config_file.close()
              
             # overwrite the input file

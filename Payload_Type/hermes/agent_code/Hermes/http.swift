@@ -73,7 +73,7 @@ func post(data: String) -> String {
         postURLComponents.scheme = "http"
     }
     
-    // Prepare URL Request Object
+    // Prepare URL Request Object, set HTTP headers
     let url = postURLComponents.url
     guard let requestUrl = url else { fatalError() }
     var request = URLRequest(url: requestUrl)
@@ -84,6 +84,11 @@ func post(data: String) -> String {
     }
     else {
         request.setValue(agentConfig.hostHeader, forHTTPHeaderField: "Host")
+    }
+    if !agentConfig.httpHeaders.isEmpty {
+        for header in agentConfig.httpHeaders {
+            request.setValue(header.value, forHTTPHeaderField: header.key)
+        }
     }
     
     // Set HTTP Request Body

