@@ -47,6 +47,14 @@ func downloadScreenshotChunk(job: Job) {
     let allocated = Int(displayCount)
     let activeDisplays = UnsafeMutablePointer<CGDirectDisplayID>.allocate(capacity: allocated)
     result = CGGetActiveDisplayList(displayCount, activeDisplays, &displayCount)
+    if (result != CGError.success) {
+        job.result = "Error: \(result)"
+        job.completed = true
+        job.success = false
+        job.status = "error"
+         return
+     }
+    
     let screenShot:CGImage = CGDisplayCreateImage(activeDisplays[job.screenshotDisplayNumber])!
     let bitmapRep = NSBitmapImageRep(cgImage: screenShot)
     let jpegData = bitmapRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [:])!
@@ -71,8 +79,5 @@ func downloadScreenshotChunk(job: Job) {
         print("LAST_CHUNK_SIZE", data.count)
         
         job.downloadChunkData = b64Data
-//        job.result = "Screenshot complete"
-//        job.completed = true
-//        job.success = true
     }
 }
