@@ -41,7 +41,7 @@ var agentConfig = AgentConfig(
     hostHeader: "REPLACE_HOST_HEADER",
     useSSL: REPLACE_USE_SSL,
     queryParameter: "REPLACE_QUERY_PARAMETER",
-    httpHeaders: [:REPLACE_HTTP_HEADERS],
+    httpHeaders: [REPLACE_HTTP_HEADERS],
     
     sleep: REPLACE_SLEEP,
     jitter: REPLACE_JITTER,

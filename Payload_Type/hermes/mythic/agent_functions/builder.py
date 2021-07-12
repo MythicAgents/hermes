@@ -64,7 +64,7 @@ class Hermes(PayloadType):
                 if key == "headers":
                     hl = val
                     hl = {n["key"]:n["value"] for n in hl}
-                    for key,value in hl.items:
+                    for key,value in hl.items():
                         if "User-Agent" in key:
                             user_agent = value
                         elif "Host" in key:
@@ -75,6 +75,9 @@ class Hermes(PayloadType):
             # strip trailing comma out of http_headers
             if http_headers[-1] == ",":
                 http_headers = http_headers[:-1]
+            # if no extra headers, create empty array in Swift
+            if not http_headers:
+                http_headers = ":"
 
             # check if callback host is using SSL
             use_ssl = "false"
