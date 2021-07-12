@@ -41,7 +41,7 @@ class Hermes(PayloadType):
 
         # get version parameter from Mythic
         target_version = self.get_parameter("version")
-git statu
+
         try:
             # Copy backup config to config.swift, open it for reading, read data
             agent_config_bak_path = "/Mythic/agent_code/Hermes/config.swift.bak"
