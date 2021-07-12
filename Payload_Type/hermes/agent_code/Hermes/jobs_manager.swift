@@ -211,6 +211,8 @@ func executeTask(job: Job, jobList: JobList) {
             job.completed = true
             job.success = true
         }
+    case "mkdir":
+        makeDirectory(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"

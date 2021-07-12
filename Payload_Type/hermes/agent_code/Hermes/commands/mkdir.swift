@@ -1,17 +1,16 @@
 //
-//  rm.swift
+//  mkdir.swift
 //  Hermes
 //
-//  Created by Justin Bui on 6/6/21.
+//  Created by Justin Bui on 7/12/21.
 //
 
 import Foundation
 
-func rm(job: Job) {
+func makeDirectory(job: Job) {
     do {
-        // Convert json to path
-        let jsonParameters = try JSON(data: toData(string: job.parameters))
-        var path = jsonParameters["path"].stringValue
+        let fileManager = FileManager.default
+        var path = job.parameters
         
         // Strip out quotes if they exist, concept from Apfell agent
         if (path.prefix(1) == "\"") {
@@ -25,23 +24,16 @@ func rm(job: Job) {
         }
         
         var isDir : ObjCBool = false
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: path, isDirectory:&isDir) {
-            // Delete file/folder
-            let fileURL = URL(fileURLWithPath: path)
-            try FileManager.default.removeItem(at: fileURL)
+        if !fileManager.fileExists(atPath: path, isDirectory:&isDir) {
+            // Create folder
+            try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
             
-            let jsonPayload = JSON([
-                "host": Host.current().localizedName!,
-                "path": fileURL.path,
-            ])
-            job.removedFiles.append(jsonPayload)
-            job.result = "\(path) was removed"
+            job.result = "\(path) directory was created"
             job.completed = true
             job.success = true
         }
         else {
-            job.result = "Folder/file does not exist"
+            job.result = "Folder/file already exist"
             job.completed = true
             job.success = false
             job.status = "error"
