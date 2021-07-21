@@ -17,7 +17,7 @@ class ScreenshotCommand(CommandBase):
     cmd = "screenshot"
     needs_admin = False
     help_cmd = "screenshot"
-    description = "Use the built-in CGDisplay API calls to capture all connected displays and send it back over the C2 channel. No need to specify any parameters as the current time will be used as the file name"
+    description = "Use the built-in CGDisplay API calls to capture all connected displays in-memory and send it back over the C2 channel, requires 'Screen Recording' permissions"
     version = 1
     author = "@slyd0g"
     parameters = []

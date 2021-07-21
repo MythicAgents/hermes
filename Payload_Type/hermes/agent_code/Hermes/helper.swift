@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 // https://stackoverflow.com/questions/26845307/generate-random-alphanumeric-string-in-swift/33860834
 func generateSessionID(length: Int) -> String {
@@ -31,7 +32,7 @@ func toBase64(data: Data) -> String {
 
 // https://stackoverflow.com/questions/31859185/how-to-convert-a-base64string-to-string-in-swift/31859383
 func fromBase64(data: String) -> Data {
-    return Data(base64Encoded: data)! //has crashed here before?
+    return Data(base64Encoded: data) ?? toData(string: "hermes") //has crashed here before?
 }
 
 func toBase64URL(base64: String) -> String {

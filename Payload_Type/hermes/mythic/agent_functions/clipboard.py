@@ -16,7 +16,7 @@ class ClipboardCommand(CommandBase):
     cmd = "clipboard"
     needs_admin = False
     help_cmd = "clipboard"
-    description = "Monitors for the first change to the system clipboard and logs it. Runs a while loop until clipboard contents change, kill prematurely with 'jobkill'. Root has no clipboard!"
+    description = "Monitors for any change to the system clipboard and logs it. Runs a while loop to continuously poll the clipboard, kill prematurely with 'jobkill'. Root has no clipboard!"
     version = 1
     author = "@slyd0g"
     attackmapping = ["T1115"]

