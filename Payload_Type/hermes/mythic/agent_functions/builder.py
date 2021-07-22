@@ -72,12 +72,13 @@ class Hermes(PayloadType):
                         else:
                             http_headers += f'"{key}"' + ":" + f'"{value}"' + ","#"key1":"value1","key2":"value2"
             
-            # strip trailing comma out of http_headers
-            if http_headers[-1] == ",":
-                http_headers = http_headers[:-1]
             # if no extra headers, create empty array in Swift
             if not http_headers:
                 http_headers = ":"
+            # strip trailing comma out of http_headers
+            if http_headers[-1] == ",":
+                http_headers = http_headers[:-1]
+
 
             # check if callback host is using SSL
             use_ssl = "false"

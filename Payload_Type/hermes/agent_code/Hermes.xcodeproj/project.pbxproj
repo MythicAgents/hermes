@@ -27,6 +27,7 @@
 		3FAAFA3C266DD30700C2E539 /* ls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3B266DD30700C2E539 /* ls.swift */; };
 		3FAAFA3E266DD32900C2E539 /* rm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3D266DD32900C2E539 /* rm.swift */; };
 		3FAAFA40266DD3AD00C2E539 /* jobs_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3F266DD3AD00C2E539 /* jobs_manager.swift */; };
+		3FC3784A26A8C77D00C8DBA4 /* whoami.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784926A8C77D00C8DBA4 /* whoami.swift */; };
 		3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD50FFC26547BED00DCD9F8 /* main.swift */; };
 		3FD5101A26571EE300DCD9F8 /* libproc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5101926571EE300DCD9F8 /* libproc.c */; };
 		3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51022265B1EDD00DCD9F8 /* http.swift */; };
@@ -70,6 +71,7 @@
 		3FAAFA3B266DD30700C2E539 /* ls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ls.swift; sourceTree = "<group>"; };
 		3FAAFA3D266DD32900C2E539 /* rm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rm.swift; sourceTree = "<group>"; };
 		3FAAFA3F266DD3AD00C2E539 /* jobs_manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = jobs_manager.swift; sourceTree = "<group>"; };
+		3FC3784926A8C77D00C8DBA4 /* whoami.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whoami.swift; sourceTree = "<group>"; };
 		3FD50FF926547BED00DCD9F8 /* Hermes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hermes; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD50FFC26547BED00DCD9F8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3FD5101726571EB600DCD9F8 /* libproc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libproc.h; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		3FAAFA23266DD0FD00C2E539 /* commands */ = {
 			isa = PBXGroup;
 			children = (
+				3FC3784926A8C77D00C8DBA4 /* whoami.swift */,
 				3F5B3A14269CED1600C84927 /* keylog.swift */,
 				3F5B3A12269C988800C84927 /* mkdir.swift */,
 				3F5B3A102698B96F00C84927 /* screenshot.swift */,
@@ -240,6 +243,7 @@
 				3FAAFA3A266DD2EB00C2E539 /* jobkill.swift in Sources */,
 				3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */,
 				3F5B3A13269C988800C84927 /* mkdir.swift in Sources */,
+				3FC3784A26A8C77D00C8DBA4 /* whoami.swift in Sources */,
 				3F9D5208268126C100227EED /* upload.swift in Sources */,
 				3FAAFA38266DD2AA00C2E539 /* jobs.swift in Sources */,
 				3FD5104526615F4900DCD9F8 /* helper.swift in Sources */,
