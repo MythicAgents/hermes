@@ -228,6 +228,8 @@ func executeTask(job: Job, jobList: JobList) {
         }
     case "whoami":
         whoami(job: job)
+    case "fda_check":
+        fullDiskAccessCheck(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
