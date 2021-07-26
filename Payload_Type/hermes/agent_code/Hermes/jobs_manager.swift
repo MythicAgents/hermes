@@ -230,6 +230,12 @@ func executeTask(job: Job, jobList: JobList) {
         whoami(job: job)
     case "fda_check":
         fullDiskAccessCheck(job: job)
+    case "env":
+        getEnvironmentVariables(job: job)
+    case "setenv":
+        setEnvironmentVariable(job: job)
+    case "unsetenv":
+        unsetEnvironmentVariable(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
