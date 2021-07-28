@@ -19,7 +19,15 @@ func upload(job: Job) {
             let fileManager = FileManager.default
             let decodedData = fromBase64(data: job.uploadData)
             
-            if !fileManager.fileExists(atPath: job.uploadFullPath) {
+            if fileManager.fileExists(atPath: job.uploadFullPath) && job.uploadChunkNumber == 2 {
+                // Delete file/folder
+                print("file exists", job.uploadChunkNumber)
+                let fileURL = URL(fileURLWithPath: job.uploadFullPath)
+                try FileManager.default.removeItem(at: fileURL)
+                fileManager.createFile(atPath: job.uploadFullPath, contents: decodedData, attributes: nil)
+            }
+            else if !fileManager.fileExists(atPath: job.uploadFullPath) && job.uploadChunkNumber == 2 {
+                print("file does not exist", job.uploadChunkNumber)
                 fileManager.createFile(atPath: job.uploadFullPath, contents: decodedData, attributes: nil)
             }
             else {
