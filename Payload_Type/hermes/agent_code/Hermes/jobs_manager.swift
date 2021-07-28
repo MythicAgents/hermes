@@ -238,6 +238,10 @@ func executeTask(job: Job, jobList: JobList) {
         unsetEnvironmentVariable(job: job)
     case "list_tcc":
         listTCCDatabase(job: job)
+    case "mv":
+        mv(job: job)
+    case "cp":
+        cp(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
