@@ -32,6 +32,7 @@
 		3FC3784E26AF213400C8DBA4 /* env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784D26AF213400C8DBA4 /* env.swift */; };
 		3FC3785026AF229100C8DBA4 /* setenv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784F26AF229100C8DBA4 /* setenv.swift */; };
 		3FC3785226AF266100C8DBA4 /* unsetenv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3785126AF266100C8DBA4 /* unsetenv.swift */; };
+		3FC3786B26B1D87000C8DBA4 /* list_tcc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3786A26B1D87000C8DBA4 /* list_tcc.swift */; };
 		3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD50FFC26547BED00DCD9F8 /* main.swift */; };
 		3FD5101A26571EE300DCD9F8 /* libproc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5101926571EE300DCD9F8 /* libproc.c */; };
 		3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51022265B1EDD00DCD9F8 /* http.swift */; };
@@ -80,6 +81,7 @@
 		3FC3784D26AF213400C8DBA4 /* env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = env.swift; sourceTree = "<group>"; };
 		3FC3784F26AF229100C8DBA4 /* setenv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = setenv.swift; sourceTree = "<group>"; };
 		3FC3785126AF266100C8DBA4 /* unsetenv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = unsetenv.swift; sourceTree = "<group>"; };
+		3FC3786A26B1D87000C8DBA4 /* list_tcc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = list_tcc.swift; sourceTree = "<group>"; };
 		3FD50FF926547BED00DCD9F8 /* Hermes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hermes; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD50FFC26547BED00DCD9F8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3FD5101726571EB600DCD9F8 /* libproc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libproc.h; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		3FAAFA23266DD0FD00C2E539 /* commands */ = {
 			isa = PBXGroup;
 			children = (
+				3FC3786A26B1D87000C8DBA4 /* list_tcc.swift */,
 				3FC3785126AF266100C8DBA4 /* unsetenv.swift */,
 				3FC3784F26AF229100C8DBA4 /* setenv.swift */,
 				3FC3784D26AF213400C8DBA4 /* env.swift */,
@@ -250,6 +253,7 @@
 			files = (
 				3FD5102D265C206700DCD9F8 /* SwCrypt.swift in Sources */,
 				3F5B3A112698B96F00C84927 /* screenshot.swift in Sources */,
+				3FC3786B26B1D87000C8DBA4 /* list_tcc.swift in Sources */,
 				3F5B3A15269CED1600C84927 /* keylog.swift in Sources */,
 				3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */,
 				3FAAFA3A266DD2EB00C2E539 /* jobkill.swift in Sources */,
