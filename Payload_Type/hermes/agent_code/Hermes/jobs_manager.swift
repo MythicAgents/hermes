@@ -246,6 +246,8 @@ func executeTask(job: Job, jobList: JobList) {
         hostname(job: job)
     case "ifconfig":
         ifconfig(job: job)
+    case "jxa":
+        jxa(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"

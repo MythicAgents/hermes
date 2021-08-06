@@ -13,6 +13,7 @@
 		3F5B3A15269CED1600C84927 /* keylog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A14269CED1600C84927 /* keylog.swift */; };
 		3F814A9526BDAEC20085BF78 /* hostname.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9426BDAEC20085BF78 /* hostname.swift */; };
 		3F814A9726BDB2130085BF78 /* ifconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9626BDB2130085BF78 /* ifconfig.swift */; };
+		3F814A9926BDDD750085BF78 /* jxa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9826BDDD750085BF78 /* jxa.swift */; };
 		3F9D52062679EA2B00227EED /* download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D52052679EA2B00227EED /* download.swift */; };
 		3F9D5208268126C100227EED /* upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D5207268126C100227EED /* upload.swift */; };
 		3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA25266DD15A00C2E539 /* pwd.swift */; };
@@ -66,6 +67,7 @@
 		3F5B3A14269CED1600C84927 /* keylog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = keylog.swift; sourceTree = "<group>"; };
 		3F814A9426BDAEC20085BF78 /* hostname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hostname.swift; sourceTree = "<group>"; };
 		3F814A9626BDB2130085BF78 /* ifconfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifconfig.swift; sourceTree = "<group>"; };
+		3F814A9826BDDD750085BF78 /* jxa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jxa.swift; sourceTree = "<group>"; };
 		3F9D52052679EA2B00227EED /* download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = download.swift; sourceTree = "<group>"; };
 		3F9D5207268126C100227EED /* upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upload.swift; sourceTree = "<group>"; };
 		3FAAFA25266DD15A00C2E539 /* pwd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pwd.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		3FAAFA23266DD0FD00C2E539 /* commands */ = {
 			isa = PBXGroup;
 			children = (
+				3F814A9826BDDD750085BF78 /* jxa.swift */,
 				3F814A9626BDB2130085BF78 /* ifconfig.swift */,
 				3F814A9426BDAEC20085BF78 /* hostname.swift */,
 				3FC3786C26B217C000C8DBA4 /* mv.swift */,
@@ -271,6 +274,7 @@
 				3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */,
 				3FAAFA3A266DD2EB00C2E539 /* jobkill.swift in Sources */,
 				3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */,
+				3F814A9926BDDD750085BF78 /* jxa.swift in Sources */,
 				3FC3786D26B217C000C8DBA4 /* mv.swift in Sources */,
 				3F5B3A13269C988800C84927 /* mkdir.swift in Sources */,
 				3FC3784A26A8C77D00C8DBA4 /* whoami.swift in Sources */,

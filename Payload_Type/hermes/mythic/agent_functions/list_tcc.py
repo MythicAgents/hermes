@@ -34,7 +34,7 @@ class ListTccCommand(CommandBase):
     description = "Lists entries in TCC database (requires Full Disk Access). Schema currently only supports Big Sur"
     version = 1
     author = "@slyd0g"
-    attackmapping = []
+    attackmapping = ["T1592"]
     supported_ui_features = []
     argument_class = ListTccArguments
 
