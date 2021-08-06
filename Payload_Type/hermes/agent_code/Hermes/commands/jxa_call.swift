@@ -1,5 +1,5 @@
 //
-//  jxa.swift
+//  jxa_call.swift
 //  Hermes
 //
 //  Created by Justin Bui on 8/6/21.
@@ -8,15 +8,17 @@
 import Foundation
 import OSAKit
 
-func jxa(job: Job){
+func jxa_call(job: Job){
     do {
         // Convert json to source and destination
         let jsonParameters = try JSON(data: toData(string: job.parameters))
-        let b64JXA = jsonParameters["code"].stringValue
-        let jxaCode = toString(data: fromBase64(data: b64JXA))
+        let jxaCode = jsonParameters["command"].stringValue
+        
+        // Append jxaCode to script in memory
+        let combinedCode = toString(data: fromBase64(data: jxaScript)) + "\n" + jxaCode
         
         // https://stackoverflow.com/questions/44209057/how-can-i-run-jxa-from-swift
-        let script = OSAScript.init(source: jxaCode, language: OSALanguage.init(forName: "JavaScript"));
+        let script = OSAScript.init(source: combinedCode, language: OSALanguage.init(forName: "JavaScript"));
         var compileError : NSDictionary?
         script.compileAndReturnError(&compileError)
         if let compileError = compileError {
@@ -39,7 +41,6 @@ func jxa(job: Job){
         
         job.completed = true
         job.success = true
-        
     }
     catch {
         job.result = "Exception caught: \(error)"

@@ -9,7 +9,7 @@ class JXACallArguments(TaskArguments):
             "command": CommandParameter(
                 name="command",
                 type=ParameterType.String,
-                description="The command to execute within a file loaded via jsimport",
+                description="The command to execute within a file loaded via jxa_import",
             )
         }
 
@@ -28,7 +28,7 @@ class JXACallCommand(CommandBase):
     cmd = "jxa_call"
     needs_admin = False
     help_cmd = "jxa_call function_call();"
-    description = "Call a function from within the JS file that was imported with 'jsimport'. This function call is appended to the end of the jsimport code and called via eval."
+    description = "Call a function from within the JS file that was imported with 'jxa_import'. This function call is appended to the end of the jxa_import code and called via eval."
     version = 1
     author = "@slyd0g"
     attackmapping = ["T1059"]

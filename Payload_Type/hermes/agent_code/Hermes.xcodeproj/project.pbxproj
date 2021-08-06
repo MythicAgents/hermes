@@ -14,6 +14,8 @@
 		3F814A9526BDAEC20085BF78 /* hostname.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9426BDAEC20085BF78 /* hostname.swift */; };
 		3F814A9726BDB2130085BF78 /* ifconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9626BDB2130085BF78 /* ifconfig.swift */; };
 		3F814A9926BDDD750085BF78 /* jxa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9826BDDD750085BF78 /* jxa.swift */; };
+		3F814A9B26BDF1470085BF78 /* jxa_import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9A26BDF1470085BF78 /* jxa_import.swift */; };
+		3F814A9D26BDF8430085BF78 /* jxa_call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9C26BDF8430085BF78 /* jxa_call.swift */; };
 		3F9D52062679EA2B00227EED /* download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D52052679EA2B00227EED /* download.swift */; };
 		3F9D5208268126C100227EED /* upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D5207268126C100227EED /* upload.swift */; };
 		3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA25266DD15A00C2E539 /* pwd.swift */; };
@@ -68,6 +70,8 @@
 		3F814A9426BDAEC20085BF78 /* hostname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hostname.swift; sourceTree = "<group>"; };
 		3F814A9626BDB2130085BF78 /* ifconfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifconfig.swift; sourceTree = "<group>"; };
 		3F814A9826BDDD750085BF78 /* jxa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jxa.swift; sourceTree = "<group>"; };
+		3F814A9A26BDF1470085BF78 /* jxa_import.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jxa_import.swift; sourceTree = "<group>"; };
+		3F814A9C26BDF8430085BF78 /* jxa_call.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jxa_call.swift; sourceTree = "<group>"; };
 		3F9D52052679EA2B00227EED /* download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = download.swift; sourceTree = "<group>"; };
 		3F9D5207268126C100227EED /* upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upload.swift; sourceTree = "<group>"; };
 		3FAAFA25266DD15A00C2E539 /* pwd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pwd.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 		3FAAFA23266DD0FD00C2E539 /* commands */ = {
 			isa = PBXGroup;
 			children = (
+				3F814A9C26BDF8430085BF78 /* jxa_call.swift */,
+				3F814A9A26BDF1470085BF78 /* jxa_import.swift */,
 				3F814A9826BDDD750085BF78 /* jxa.swift */,
 				3F814A9626BDB2130085BF78 /* ifconfig.swift */,
 				3F814A9426BDAEC20085BF78 /* hostname.swift */,
@@ -266,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F814A9B26BDF1470085BF78 /* jxa_import.swift in Sources */,
 				3F814A9726BDB2130085BF78 /* ifconfig.swift in Sources */,
 				3FD5102D265C206700DCD9F8 /* SwCrypt.swift in Sources */,
 				3F5B3A112698B96F00C84927 /* screenshot.swift in Sources */,
@@ -300,6 +307,7 @@
 				3FAAFA36266DD29900C2E539 /* sleep.swift in Sources */,
 				3FAAFA2C266DD23000C2E539 /* cat.swift in Sources */,
 				3FAAFA3C266DD30700C2E539 /* ls.swift in Sources */,
+				3F814A9D26BDF8430085BF78 /* jxa_call.swift in Sources */,
 				3FAAFA30266DD25500C2E539 /* shell.swift in Sources */,
 				3FC3785026AF229100C8DBA4 /* setenv.swift in Sources */,
 				3FD5101A26571EE300DCD9F8 /* libproc.c in Sources */,

