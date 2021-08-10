@@ -4,7 +4,7 @@
   <img alt="Hermes Logo" src="agent_icons/hermes.svg" height="30%" width="30%">
 </p>
 
-Hermes is a Swift payload for macOS. This version currently supports Mythic 2.2.8 and will update as necessary. It will not work with Mythic 2.1 and lower.
+Hermes is a Swift 5 payload for macOS. This version currently supports Mythic 2.2.8 and will update as necessary. It will not work with Mythic 2.1 and lower.
 
 The agent has `mythic_payloadtype_container==0.0.44` PyPi package installed and reports to Mythic as version "8".
 
@@ -22,6 +22,10 @@ Now, you might be wondering _when_ should you or a user do this to properly add 
 * Mythic is already up and going, then you can run the install script and just direct that agent's containers to start (i.e. `sudo ./mythic-cli payload start agentName` and if that agent has its own special C2 containers, you'll need to start them too via `sudo ./mythic-cli c2 start c2profileName`).
 * Mythic is already up and going, but you want to minimize your steps, you can just install the agent and run `sudo ./mythic-cli mythic start`. That script will first _stop_ all of your containers, then start everything back up again. This will also bring in the new agent you just installed.
 * Mythic isn't running, you can install the script and just run `sudo ./mythic-cli mythic start`. 
+
+## Building Hermes within Mythic
+
+The first time to build Hermes from Mythic, Command Line Tools need to be installed within the Hermes container. This is done automatically for you upon first build and can take up to ~5 minutes.
 
 ## Thank you
 
