@@ -2,6 +2,7 @@ from mythic_payloadtype_container.PayloadBuilder import *
 from mythic_payloadtype_container.MythicCommandBase import *
 import asyncio
 import os
+from os import path
 from distutils.dir_util import copy_tree
 import shutil
 import tempfile
@@ -17,7 +18,7 @@ class Hermes(PayloadType):
     supported_os = [SupportedOS.MacOS]  # supported OS and architecture combos
     wrapper = False  # does this payload type act as a wrapper for another payloads inside of it?
     wrapped_payloads = []  # if so, which payload types. If you are writing a wrapper, you will need to modify this variable (adding in your wrapper's name) in the builder.py of each payload that you want to utilize your wrapper.
-    note = """This payload uses Swift for execution on macOS boxes"""
+    note = """A Swift 5 agent targeting macOS hosts."""
     supports_dynamic_loading = False  # setting this to True allows users to only select a subset of commands when generating a payload
     build_parameters = {
         #  these are all the build parameters that will be presented to the user when creating your payload
@@ -107,13 +108,17 @@ class Hermes(PayloadType):
             config_file.write(data)
             config_file.close()
 
-            # ensure swift compiler is installed
-            xcode_install = '/usr/libexec/darling/bin/bash -c "yes | xcode-select --install"'
-            p = subprocess.Popen(xcode_install, shell=True)
-            p.wait()
+            # ensure swift compiler is installed if CLT is not installed
+            clt_path = '/usr/libexec/darling/Volumes/Command_Line_Tools_for_Xcode_11.3.1/Command Line Tools.pkg'
+            if not path.exists(clt_path)
+
+
+            #xcode_install = '/usr/libexec/darling/bin/bash -c "yes | xcode-select --install"'
+            #p = subprocess.Popen(xcode_install, shell=True)
+            #p.wait()
 
             # setup build command
-            command = '/usr/libexec/darling/bin/bash -c "swiftc -swift-version 4 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes -target x86_64-apple-macosx{version} -static-stdlib"'.format(version=target_version)
+            command = '/usr/libexec/darling/bin/bash -c "swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes -target x86_64-apple-macosx{version} -static-stdlib"'.format(version=target_version)
 
             # build Hermes
             proc = await asyncio.create_subprocess_shell(
