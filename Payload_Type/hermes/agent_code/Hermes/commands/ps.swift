@@ -45,7 +45,7 @@ func ps(job: Job) {
         // Allocate a buffer to store the name
         let nameBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(MAXPATHLEN))
         defer {
-            nameBuffer.deallocate(capacity: Int(MAXPATHLEN))
+            nameBuffer.deallocate()
         }
         
         // Get process name 2 (this doesn't always return a process name ...), use the truncated processName if this doesn't return
@@ -62,7 +62,7 @@ func ps(job: Job) {
         // Get process full path
             let pathBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(MAXPATHLEN))
             defer {
-                pathBuffer.deallocate(capacity: Int(MAXPATHLEN))
+                pathBuffer.deallocate()
             }
             let pathLength = proc_pidpath(pid, pathBuffer, UInt32(MAXPATHLEN))
             var processPath = ""

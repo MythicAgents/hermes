@@ -25,8 +25,8 @@ class Hermes(PayloadType):
         "version": BuildParameter(
             name="version",
             parameter_type=BuildParameterType.ChooseOne,
-            description="Choose a target macOS version (Mojave, Catalina, Big Sur)",
-            choices=["10.14", "10.15", "10.16"],
+            description="Choose a target macOS version (Catalina, Big Sur)",
+            choices=["10.15", "10.16"],
         ),
     }
     #  the names of the c2 profiles that your agent supports
@@ -110,7 +110,21 @@ class Hermes(PayloadType):
 
             # ensure swift compiler is installed if CLT is not installed
             clt_path = '/usr/libexec/darling/Volumes/Command_Line_Tools_for_Xcode_11.3.1/Command Line Tools.pkg'
-            if not path.exists(clt_path)
+            if not os.path.exists(clt_path):
+                install_command = '/usr/libexec/darling/bin/bash install_clt.sh'
+                subprocess.run(['/usr/libexec/darling/bin/bash', 'install_clt.sh'], cwd="/")
+                #proc = await asyncio.create_subprocess_shell(
+                    #install_command,
+                   # stdout=asyncio.subprocess.PIPE,
+                  #  stderr=asyncio.subprocess.PIPE,
+                 #   cwd="/",
+                #)
+
+                #stdout, stderr = await proc.communicate()
+                #if stdout:
+                    #resp.build_stdout += f"\n[STDOUT]\n{stdout.decode()}"
+                #if stderr:
+                    #resp.build_stderr += f"\n[STDERR]\n{stderr.decode()}"
 
 
             #xcode_install = '/usr/libexec/darling/bin/bash -c "yes | xcode-select --install"'
