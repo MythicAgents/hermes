@@ -266,6 +266,8 @@ func executeTask(job: Job, jobList: JobList) {
         }
     case "jxa_call":
         jxa_call(job: job)
+    case "plist_print":
+        plist_print(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
