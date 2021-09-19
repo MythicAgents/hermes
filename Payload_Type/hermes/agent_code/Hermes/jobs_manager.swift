@@ -75,6 +75,7 @@ class Job {
 // jxa_import & jxa_call
 var jxaScript = ""
 
+// keylog
 var capslock = false
 var keylogBuffer = ""
 var activeApp = ""

