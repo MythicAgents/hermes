@@ -33,7 +33,7 @@ func ps(job: Job) {
         // Attempt to get true PPID, if it fails, return ppid from kernel structure
         var ppid = truePPID(Int(pid))
         if pid == ppid {
-            ppid = proc.kp_proc.p_oppid  // this always returns process 0 which is kernel_task
+            ppid = proc.kp_eproc.e_ppid
         }
         
         // Get process name (this truncates ...)
