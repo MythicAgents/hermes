@@ -8,6 +8,10 @@ Hermes is a Swift 5 payload for macOS. This version currently supports Mythic 2.
 
 The agent has `mythic_payloadtype_container==0.0.44` PyPi package installed and reports to Mythic as version "8".
 
+## Prerequisites
+
+* Hermes requires the Darling kernel module to perform cross-compilation on the Mythic server. Install it from here https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb. It is tested for Ubuntu 20.10.
+* After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
 
 ## How to install an agent in this format within Mythic
 
