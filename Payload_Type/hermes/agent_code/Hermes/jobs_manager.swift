@@ -269,6 +269,8 @@ func executeTask(job: Job, jobList: JobList) {
         jxa_call(job: job)
     case "plist_print":
         plist_print(job: job)
+    case "kill":
+        killProcess(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"

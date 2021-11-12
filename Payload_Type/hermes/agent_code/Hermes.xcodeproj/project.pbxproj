@@ -12,6 +12,7 @@
 		3F5B3A112698B96F00C84927 /* screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A102698B96F00C84927 /* screenshot.swift */; };
 		3F5B3A13269C988800C84927 /* mkdir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A12269C988800C84927 /* mkdir.swift */; };
 		3F5B3A15269CED1600C84927 /* keylog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A14269CED1600C84927 /* keylog.swift */; };
+		3F776B31273E0E5200C23517 /* kill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F776B30273E0E5200C23517 /* kill.swift */; };
 		3F814A9526BDAEC20085BF78 /* hostname.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9426BDAEC20085BF78 /* hostname.swift */; };
 		3F814A9726BDB2130085BF78 /* ifconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9626BDB2130085BF78 /* ifconfig.swift */; };
 		3F814A9926BDDD750085BF78 /* jxa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9826BDDD750085BF78 /* jxa.swift */; };
@@ -69,6 +70,7 @@
 		3F5B3A102698B96F00C84927 /* screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = screenshot.swift; sourceTree = "<group>"; };
 		3F5B3A12269C988800C84927 /* mkdir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mkdir.swift; sourceTree = "<group>"; };
 		3F5B3A14269CED1600C84927 /* keylog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = keylog.swift; sourceTree = "<group>"; };
+		3F776B30273E0E5200C23517 /* kill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kill.swift; sourceTree = "<group>"; };
 		3F814A9426BDAEC20085BF78 /* hostname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hostname.swift; sourceTree = "<group>"; };
 		3F814A9626BDB2130085BF78 /* ifconfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifconfig.swift; sourceTree = "<group>"; };
 		3F814A9826BDDD750085BF78 /* jxa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jxa.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				3FAAFA3D266DD32900C2E539 /* rm.swift */,
 				3FAAFA3B266DD30700C2E539 /* ls.swift */,
 				3FAAFA39266DD2EB00C2E539 /* jobkill.swift */,
+				3F776B30273E0E5200C23517 /* kill.swift */,
 				3FAAFA37266DD2AA00C2E539 /* jobs.swift */,
 				3FAAFA35266DD29900C2E539 /* sleep.swift */,
 				3FAAFA33266DD28700C2E539 /* ps.swift */,
@@ -298,6 +301,7 @@
 				3FAAFA2E266DD24400C2E539 /* run.swift in Sources */,
 				3F814A9526BDAEC20085BF78 /* hostname.swift in Sources */,
 				3F5B3A0F26962D7B00C84927 /* clipboard.swift in Sources */,
+				3F776B31273E0E5200C23517 /* kill.swift in Sources */,
 				3FAAFA3E266DD32900C2E539 /* rm.swift in Sources */,
 				3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */,
 				3FD51026265B277400DCD9F8 /* config.swift in Sources */,

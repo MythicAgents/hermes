@@ -46,7 +46,7 @@ func get(data: String) -> String {
     
     // Perform HTTP Request
     let task = URLSession(configuration: .ephemeral).dataTask(with: request) { data, _, _ in
-         results = String(data: data!, encoding: .utf8)!
+         results = String(data: data ?? toData(string: "bad message"), encoding: .utf8)!
         dispatch.leave()
     }
     task.resume()
