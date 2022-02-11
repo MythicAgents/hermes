@@ -4,7 +4,7 @@
   <img alt="Hermes Logo" src="agent_icons/hermes.svg" height="30%" width="30%">
 </p>
 
-Hermes is a Swift 5 payload for macOS. This version currently supports Mythic 2.2.8 and will update as necessary. It will not work with Mythic 2.1 and lower.
+Hermes is a Swift 5 payload for macOS. This version currently supports Mythic 2.3 and will update as necessary. It will not work with Mythic 2.2 and lower.
 
 The agent has `mythic_payloadtype_container==0.0.44` PyPi package installed and reports to Mythic as version "8".
 
