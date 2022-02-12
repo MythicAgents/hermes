@@ -5,15 +5,15 @@ import base64
 
 
 class JXAImportArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "file": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="file",
                 type=ParameterType.File,
                 description="Select a JXA file to upload",
             )
-        }
+        ]
 
     async def parse_arguments(self):
         if len(self.command_line) > 0:

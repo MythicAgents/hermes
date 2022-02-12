@@ -18,17 +18,18 @@ class Hermes(PayloadType):
     supported_os = [SupportedOS.MacOS]  # supported OS and architecture combos
     wrapper = False  # does this payload type act as a wrapper for another payloads inside of it?
     wrapped_payloads = []  # if so, which payload types. If you are writing a wrapper, you will need to modify this variable (adding in your wrapper's name) in the builder.py of each payload that you want to utilize your wrapper.
-    note = """A Swift 5 agent targeting macOS hosts. Note: The first time you build a payload, Command Line Tools is installed this can take up to ~5 minutes."""
+    note = """A Swift 5 agent targeting macOS. 
+    Note: The first time you build a payload the hermes container will appear to go down while Command Line Tools is being installed. This can take up to ~10 minutes."""
     supports_dynamic_loading = False  # setting this to True allows users to only select a subset of commands when generating a payload
-    build_parameters = {
+    build_parameters = [
         #  these are all the build parameters that will be presented to the user when creating your payload
-        "version": BuildParameter(
+        BuildParameter(
             name="version",
             parameter_type=BuildParameterType.ChooseOne,
             description="Choose a target macOS version (Catalina, Big Sur)",
             choices=["10.15", "10.16"],
         ),
-    }
+    ]
     #  the names of the c2 profiles that your agent supports
     c2_profiles = ["http"]
     support_browser_scripts = [
