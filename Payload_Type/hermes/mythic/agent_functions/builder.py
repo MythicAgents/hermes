@@ -11,15 +11,13 @@ import subprocess
 
 # define your payload type class here, it must extend the PayloadType class though
 class Hermes(PayloadType):
-
     name = "hermes"  # name that would show up in the UI
     file_extension = ""  # default file extension to use when creating payloads
     author = "@slyd0g"  # author of the payload type
     supported_os = [SupportedOS.MacOS]  # supported OS and architecture combos
     wrapper = False  # does this payload type act as a wrapper for another payloads inside of it?
     wrapped_payloads = []  # if so, which payload types. If you are writing a wrapper, you will need to modify this variable (adding in your wrapper's name) in the builder.py of each payload that you want to utilize your wrapper.
-    note = """A Swift 5 agent targeting macOS. 
-    Note: The first time you build a payload the hermes container will appear to go down while Command Line Tools is being installed. This can take up to ~10 minutes."""
+    note = """A Swift 5 implant targeting macOS"""
     supports_dynamic_loading = False  # setting this to True allows users to only select a subset of commands when generating a payload
     build_parameters = [
         #  these are all the build parameters that will be presented to the user when creating your payload
@@ -81,7 +79,6 @@ class Hermes(PayloadType):
             if http_headers[-1] == ",":
                 http_headers = http_headers[:-1]
 
-
             # check if callback host is using SSL
             use_ssl = "false"
             if "https" in self.c2info[0].get_parameters_dict()["callback_host"]:
@@ -109,31 +106,8 @@ class Hermes(PayloadType):
             config_file.write(data)
             config_file.close()
 
-            # ensure swift compiler is installed if CLT is not installed
-            clt_path = '/usr/libexec/darling/Volumes/Command_Line_Tools_for_Xcode_11.3.1/Command Line Tools.pkg'
-            if not os.path.exists(clt_path):
-                install_command = '/usr/libexec/darling/bin/bash install_clt.sh'
-                subprocess.run(['/usr/libexec/darling/bin/bash', 'install_clt.sh'], cwd="/")
-                #proc = await asyncio.create_subprocess_shell(
-                    #install_command,
-                   # stdout=asyncio.subprocess.PIPE,
-                  #  stderr=asyncio.subprocess.PIPE,
-                 #   cwd="/",
-                #)
-
-                #stdout, stderr = await proc.communicate()
-                #if stdout:
-                    #resp.build_stdout += f"\n[STDOUT]\n{stdout.decode()}"
-                #if stderr:
-                    #resp.build_stderr += f"\n[STDERR]\n{stderr.decode()}"
-
-
-            #xcode_install = '/usr/libexec/darling/bin/bash -c "yes | xcode-select --install"'
-            #p = subprocess.Popen(xcode_install, shell=True)
-            #p.wait()
-
             # setup build command
-            command = '/usr/libexec/darling/bin/bash -c "swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes -target x86_64-apple-macosx{version} -static-stdlib"'.format(version=target_version)
+            command = '/usr/libexec/darling/bin/bash -c "xcode-select -s /Library/Developer/CommandLineTools; swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes -target x86_64-apple-macosx{version} -static-stdlib"'.format(version=target_version)
 
             # build Hermes
             proc = await asyncio.create_subprocess_shell(

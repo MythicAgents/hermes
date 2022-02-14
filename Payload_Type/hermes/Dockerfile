@@ -1,1 +1,1 @@
-From slyd0g/hermes:mythic2.3
+From slyd0g/hermes:mythic_2.3

