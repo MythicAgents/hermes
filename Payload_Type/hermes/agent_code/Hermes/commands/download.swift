@@ -124,7 +124,6 @@ func downloadChunk(job: Job) {
         let b64Data = toBase64(data: data)
         
         job.downloadChunkData = b64Data
-        job.result = "Download complete"
         job.completed = true
         job.success = true
     }

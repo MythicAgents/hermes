@@ -197,6 +197,18 @@ func executeTask(job: Job, jobList: JobList) {
         }
         // If job already has a file_id, download a chunk of the file
         else {
+            // For download_new browser script
+            if (job.downloadChunkNumber == 1) {
+                let jsonUserOutput = JSON([
+                    "agent_file_id": job.downloadFileID,
+                    "total_chunks": job.downloadTotalChunks,
+                ])
+                job.result = jsonUserOutput.rawString() ?? ""
+            }
+            else {
+                job.result = ""
+            }
+            
             downloadChunk(job: job)
         }
     case "upload":
@@ -365,6 +377,7 @@ func postResponse(jobList: JobList) {
                     "file_id": job.downloadFileID,
                     "chunk_data": job.downloadChunkData,
                     "task_id": job.taskID,
+                    "user_output": job.result,
                 ])
                 jsonJobOutput.append(jsonResponse)
                 job.downloadChunkNumber = job.downloadChunkNumber + 1
