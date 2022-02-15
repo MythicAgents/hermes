@@ -34,7 +34,7 @@ class JxaCommand(CommandBase):
     version = 1
     author = "@slyd0g"
     argument_class = JxaArguments
-    attackmapping = ["T1059"]
+    attackmapping = ["T1059.002"]
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
         return task

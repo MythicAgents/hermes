@@ -25,6 +25,12 @@ class JXAImportArguments(TaskArguments):
             raise ValueError("Missing arguments")
         pass
 
+    async def parse_dictionary(self, dictionary_arguments):
+        if "file" in dictionary_arguments:
+            self.add_arg("file", dictionary_arguments["file"])
+        else:
+            raise ValueError("Missing 'file' argument")
+
 
 class JXAImportCommand(CommandBase):
     cmd = "jxa_import"
@@ -33,20 +39,24 @@ class JXAImportCommand(CommandBase):
     description = "import a JXA file into memory. Only one can be imported at a time."
     version = 1
     author = "@slyd0g"
-    attackmapping = ["T1059"]
+    attackmapping = ["T1020", "T1030", "T1041", "T1620", "T1105"]
     argument_class = JXAImportArguments
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
-        original_file_name = json.loads(task.original_params)["file"]
-        file_resp = await MythicRPC().execute("create_file", task_id=task.id,
-            file=base64.b64encode(task.args.get_arg("file")).decode(),
-            saved_file_name=original_file_name
-        )
-        if file_resp.status == MythicStatus.Success:
-            task.args.add_arg("file", file_resp.response["agent_file_id"])
-            task.display_params = f"{original_file_name} into memory"
+        file_resp = await MythicRPC().execute("get_file",
+                                              file_id=task.args.get_arg("file"),
+                                              task_id=task.id,
+                                              get_contents=False)
+        if file_resp.status == MythicRPCStatus.Success:
+            original_file_name = file_resp.response[0]["filename"]
         else:
             raise Exception("Error from Mythic: " + str(file_resp.error))
+        task.display_params = f"{original_file_name} into memory"
+        file_resp = await MythicRPC().execute("update_file",
+                                              file_id=task.args.get_arg("file"),
+                                              delete_after_fetch=False,
+                                              comment="Uploaded into memory for jxa_call")
+
         return task
 
     async def process_response(self, response: AgentResponse):

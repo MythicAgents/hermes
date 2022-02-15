@@ -20,8 +20,8 @@ class PsCommand(CommandBase):
     supported_ui_features = ["process_browser:list"]
     author = "@slyd0g"
     argument_class = PsArguments
-    attackmapping = []
-    browser_script = BrowserScript(script_name="ps", author="@slyd0g")
+    attackmapping = ["T1057"]
+    browser_script = BrowserScript(script_name="ps_new", author="@djhohnstein", for_new_ui=True)
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
         return task

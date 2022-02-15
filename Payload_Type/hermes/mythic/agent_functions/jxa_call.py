@@ -10,6 +10,7 @@ class JXACallArguments(TaskArguments):
                 name="command",
                 type=ParameterType.String,
                 description="The command to execute within a file loaded via jxa_import",
+                parameter_group_info=[ParameterGroupInfo()]
             )
         ]
 
@@ -31,7 +32,7 @@ class JXACallCommand(CommandBase):
     description = "Call a function from within the JS file that was imported with 'jxa_import'. This function call is appended to the end of the jxa_import code and called via eval."
     version = 1
     author = "@slyd0g"
-    attackmapping = ["T1059"]
+    attackmapping = ["T1059.002"]
     argument_class = JXACallArguments
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:

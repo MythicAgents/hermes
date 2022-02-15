@@ -23,7 +23,7 @@ class ScreenshotCommand(CommandBase):
     parameters = []
     attackmapping = ["T1113"]
     argument_class = ScreenshotArguments
-    browser_script = BrowserScript(script_name="screenshot", author="@djhohnstein")
+    browser_script = BrowserScript(script_name="screencapture_new", author="@djhohnstein", for_new_ui=True)
     supported_os = [SupportedOS.MacOS]
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:

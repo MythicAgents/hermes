@@ -126,10 +126,11 @@ func ls(job: Job) {
         
         // If at / set parent_path to blank, else pop one from components and re-concatenate for parent_path
         var components = fileManager.componentsToDisplay(forPath: path)
-        if (components?[0] == "Macintosh HD") {
+        if (components?.count == 0) {
             jsonResult["parent_path"].stringValue = ""
         }
         else {
+            _ = components?.removeFirst()
             _ = components?.popLast()
             jsonResult["parent_path"].stringValue = "/" + (components?.joined(separator: "/"))! as String
         }
