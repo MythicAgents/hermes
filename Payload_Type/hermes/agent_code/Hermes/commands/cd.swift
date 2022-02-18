@@ -17,16 +17,30 @@ func cd(job: Job) {
     }
     
     if (job.parameters == "..") {
-        fileManager.changeCurrentDirectoryPath("../")
-        job.result = "Changed working directory to \(fileManager.currentDirectoryPath)"
-        job.completed = true
-        job.success = true
+        if fileManager.changeCurrentDirectoryPath("../") {
+            job.result = "Changed working directory to \(fileManager.currentDirectoryPath)"
+            job.completed = true
+            job.success = true
+        }
+        else {
+            job.result = "Could not change directory to \(path)"
+            job.completed = true
+            job.success = false
+            job.status = "error"
+        }
     }
     else if fileManager.fileExists(atPath: path) {
-        fileManager.changeCurrentDirectoryPath(path)
-        job.result = "Changed working directory to \(fileManager.currentDirectoryPath)"
-        job.completed = true
-        job.success = true
+        if fileManager.changeCurrentDirectoryPath(path) {
+            job.result = "Changed working directory to \(fileManager.currentDirectoryPath)"
+            job.completed = true
+            job.success = true
+        }
+        else {
+            job.result = "Could not change directory to \(path)"
+            job.completed = true
+            job.success = false
+            job.status = "error"
+        }
     }
     else {
         job.result = "No such directory"
