@@ -27,6 +27,7 @@ func runBinary(job: Job) {
         }
         
         task.standardOutput = outputPipe
+        task.standardError = outputPipe
         
         try task.run()
         
