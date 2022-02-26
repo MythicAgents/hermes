@@ -12,7 +12,8 @@ class MvArguments(TaskArguments):
                 description="Source file to move.",
                 parameter_group_info=[
                     ParameterGroupInfo(
-                        ui_position=1
+                        ui_position=1,
+                        required=True
                     )
                 ]
             ),
@@ -22,7 +23,8 @@ class MvArguments(TaskArguments):
                 description="Source will move to this location",
                 parameter_group_info=[
                     ParameterGroupInfo(
-                        ui_position=2
+                        ui_position=2,
+                        required=True
                     )
                 ]
             ),

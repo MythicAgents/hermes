@@ -11,7 +11,11 @@ class CpArguments(TaskArguments):
                 type=ParameterType.String,
                 description="Source file to copy.",
                 parameter_group_info=[
-                    ParameterGroupInfo(ui_position=1)
+                    ParameterGroupInfo(
+                        ui_position=1,
+                        required=True
+                        )
+                    
                 ]
             ),
             CommandParameter(
@@ -19,7 +23,10 @@ class CpArguments(TaskArguments):
                 type=ParameterType.String,
                 description="Source will copy to this location",
                 parameter_group_info=[
-                    ParameterGroupInfo(ui_position=2)
+                    ParameterGroupInfo(
+                        ui_position=2,
+                        required=True
+                        )
                 ]
             ),
         ]

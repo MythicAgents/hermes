@@ -9,7 +9,7 @@ class JXACallArguments(TaskArguments):
             CommandParameter(
                 name="command",
                 type=ParameterType.String,
-                description="The command to execute within a file loaded via jxa_import",
+                description="The function to execute within a file loaded via jxa_import",
                 parameter_group_info=[ParameterGroupInfo()]
             )
         ]
