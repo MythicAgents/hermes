@@ -12,17 +12,22 @@ import Foundation
 func getExecutionContext(job: Job) {
     if let bundleIdentifier = ProcessInfo.processInfo.environment["__CFBundleIdentifier"]{
         if !("\(bundleIdentifier)".contains("0")){
-            job.result += "Current process context: \(bundleIdentifier)"
+            job.result += "__CFBundleIdentifier=\(bundleIdentifier)\n"
+            if bundleIdentifier == "com.apple.Terminal" || bundleIdentifier == "com.googlecode.iterm2" {
+                job.result += "Loaded within Terminal, use \"tcc_folder_check\" to see if you have access to TCC-protected folders\n"
+            }
         }
     }
     if let xpcServiceName = ProcessInfo.processInfo.environment["XPC_SERVICE_NAME"]{
         if !("\(xpcServiceName)".contains("0")){
-            job.result += "Current process context: \(xpcServiceName)"
+            job.result += "XPC_SERVICE_NAME=\(xpcServiceName)\n"
+            job.result += "Loaded within an Application Bundle or Launch Item\n"
         }
     }
     if let packagePath = ProcessInfo.processInfo.environment["PACKAGE_PATH"]{
         if !("\(packagePath)".contains("0")){
-            job.result += "Current process context: \(packagePath)"
+            job.result += "PACKAGE_PATH=\(packagePath)\n"
+            job.result += "Loaded within an Installer Package\n"
             
         }
     }

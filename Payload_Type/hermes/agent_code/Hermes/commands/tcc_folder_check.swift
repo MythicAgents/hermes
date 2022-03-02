@@ -21,22 +21,21 @@ func tccFolderCheck(job: Job) {
                 let item = Unmanaged<MDItem>.fromOpaque(rawPtr).takeUnretainedValue()
                 if let path = MDItemCopyAttribute(item, kMDItemPath) as? String {
                     if path == "/Users/\(username)/Desktop" {
-                        job.result += "Terminal has been granted TCC access to \(path)"
+                        job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
                     if path == "/Users/\(username)/Documents"{
-                        job.result += "Terminal has been granted TCC access to \(path)"
+                        job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
                     if path == "/Users/\(username)/Downloads"{
-                        job.result += "Terminal has been granted TCC access to \(path)"
+                        job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
                 }
             }
         }
     }
     
-    
     if job.result == "" {
-        job.result = "Terminal has not been granted to TCC-protected folders."
+        job.result = "Terminal has not been granted access to TCC-protected folders."
     }
     job.completed = true
     job.success = true

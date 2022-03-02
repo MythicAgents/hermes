@@ -295,7 +295,7 @@ func executeTask(job: Job, jobList: JobList) {
         killProcess(job: job)
     case "get_execution_context":
         getExecutionContext(job: job)
-    case "tcc_folder_checker":
+    case "tcc_folder_check":
         tccFolderCheck(job: job)
     default:
         job.result = "Command not implemented."
