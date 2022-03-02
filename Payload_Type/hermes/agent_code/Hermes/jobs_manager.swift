@@ -293,6 +293,10 @@ func executeTask(job: Job, jobList: JobList) {
         plist_print(job: job)
     case "kill":
         killProcess(job: job)
+    case "get_execution_context":
+        getExecutionContext(job: job)
+    case "tcc_folder_checker":
+        tccFolderCheck(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
