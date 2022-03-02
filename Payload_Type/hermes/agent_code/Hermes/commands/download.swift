@@ -77,9 +77,6 @@ func getFileID(job: Job, isScreenshot: Bool) {
             let bitmapRep = NSBitmapImageRep(cgImage: screenShot)
             let jpegData = bitmapRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [:])!
             let totalChunks = Int(ceil(Float(jpegData.count)/512000))
-            print("JPEGDATA_SIZE", jpegData.count)
-            print("JPEGDATA_TOTAL_CHUNKS", totalChunks)
-            print("DISPLAY_NUMBER", job.screenshotDisplayNumber)
             
             job.downloadFileSize = jpegData.count
             job.downloadChunkNumber = 1

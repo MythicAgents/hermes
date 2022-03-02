@@ -68,7 +68,6 @@ func downloadScreenshotChunk(job: Job) {
         // Read data and convert to b64
         let data = jpegData[offset ..< (offset + 512000)]
         let b64Data = toBase64(data: data)
-        print("CHUNK_SIZE", data.count)
         
         job.downloadChunkData = b64Data
     }
@@ -77,7 +76,6 @@ func downloadScreenshotChunk(job: Job) {
         // Read remainder data and convert to b64
         let data = jpegData[Data.Index(offset) ..< job.downloadFileSize]
         let b64Data = toBase64(data: data)
-        print("LAST_CHUNK_SIZE", data.count)
         
         job.downloadChunkData = b64Data
     }
