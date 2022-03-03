@@ -324,7 +324,7 @@ func postResponse(jobList: JobList) {
                 "completed": job.success,
                 "status": job.status,
                 "processes": job.processes,
-                "file_browser:": job.fileBrowser,
+                "file_browser": job.fileBrowser,
                 "removed_files": job.removedFiles,
             ])
             jsonJobOutput.append(jsonResponse)
