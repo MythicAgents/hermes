@@ -80,6 +80,12 @@ var capslock = false
 var keylogBuffer = ""
 var activeApp = ""
 
+// Tracking TCC permissions
+var tccFullDiskAccess = false
+var tccDownloads = false
+var tccDocuments = false
+var tccDesktop = false
+
 class JobList {
     var jobCount = 0
     var jobs = [Job]()

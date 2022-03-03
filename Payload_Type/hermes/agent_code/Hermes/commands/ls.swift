@@ -57,10 +57,14 @@ func ls(job: Job) {
                 jsonResult["success"].boolValue = true
                 var jsonFiles = [JSON]()
                 
+                // TCC-protected directories
+                let downloadsFolder = "/Users/\(NSUserName())/Downloads"
+                let desktopFolder = "/Users/\(NSUserName())/Desktop"
+                let documentsFolder = "/Users/\(NSUserName())/Documents"
+                
                 // Loop through files in folder
                 for file in files {
                     let fullPath = path + file
-                    let attributes = try fileManager.attributesOfItem(atPath: fullPath)
                     
                     // Get file name
                     let name = file
@@ -73,46 +77,79 @@ func ls(job: Job) {
                         }
                     }
                     
-                    // Determine access_time, modify_time, and size
-                    // Return blank access time, we will return modify_time within permissions JSON
-                    let accessTime = ""
-                    let modifyTime = (attributes[FileAttributeKey.modificationDate] as! Date).toString(dateFormat: "MM-dd-yyyy")
-                    let size = attributes[FileAttributeKey.size] as! UInt64
-                    
-                    // Get all fields for permissions JSON
-                    let posixPermissions = String(attributes[FileAttributeKey.posixPermissions] as! Int, radix: 8, uppercase: false)
-                    let owner = attributes[FileAttributeKey.ownerAccountName] as? String
-                    let group = attributes[FileAttributeKey.groupOwnerAccountName] as? String
-                    let hidden = attributes[FileAttributeKey.extensionHidden] as? Bool
-                    let createTime = (attributes[FileAttributeKey.creationDate] as! Date).toString(dateFormat: "MM-dd-yyyy")
-                    
-                    // Get extended attributes
-                    let fileURL = URL(fileURLWithPath: fullPath)
-                    let extendedList = try fileURL.listExtendedAttributes()
-                    let extendedAttributes = extendedList.joined(separator: "|")
-                    
-                    // Create JSON struct for permissions of each file/folder
-                    let jsonPermissions = JSON([
-                        "posix": posixPermissions,
-                        "owner": owner,
-                        "group": group,
-                        "hidden": hidden,
-                        "create_time": createTime,
-                        "extended.attributes": extendedAttributes,
-                    ])
-                    
-                    // Create JSON struct for each file/folder, this will be appended to jsonFiles
-                    let jsonFile = JSON([
-                        "is_file": isFile,
-                        "permissions": jsonPermissions,
-                        "name": name,
-                        "access_time": accessTime,
-                        "modify_time": modifyTime,
-                        "size": size,
-                    ])
-                    jsonFiles.append(jsonFile)
-                }
-                jsonResult["files"].arrayObject = jsonFiles
+                    // Check if the agent can access TCC-protected folders before gathering extended attributes
+                    if (fullPath == downloadsFolder && tccDownloads) || // allowed to access Downloads
+                        (fullPath == desktopFolder && tccDesktop) || // allowed to access Desktop
+                        (fullPath == documentsFolder && tccDocuments) || // allowed to access Documents
+                        ((fullPath != downloadsFolder) && (fullPath != desktopFolder) && (fullPath != documentsFolder)) || // not a TCC protected folder
+                        tccFullDiskAccess //FDA allows everything
+                    {
+                        let attributes = try fileManager.attributesOfItem(atPath: fullPath)
+                        
+                        // Determine access_time, modify_time, and size
+                        // Return blank access time, we will return modify_time within permissions JSON
+                        let accessTime = ""
+                        let modifyTime = (attributes[FileAttributeKey.modificationDate] as! Date).toString(dateFormat: "MM-dd-yyyy")
+                        let size = attributes[FileAttributeKey.size] as! UInt64
+                        
+                        // Get all fields for permissions JSON
+                        let posixPermissions = String(attributes[FileAttributeKey.posixPermissions] as! Int, radix: 8, uppercase: false)
+                        let owner = attributes[FileAttributeKey.ownerAccountName] as? String
+                        let group = attributes[FileAttributeKey.groupOwnerAccountName] as? String
+                        let hidden = attributes[FileAttributeKey.extensionHidden] as? Bool
+                        let createTime = (attributes[FileAttributeKey.creationDate] as! Date).toString(dateFormat: "MM-dd-yyyy")
+                        
+                        // Get extended attributes
+                        let fileURL = URL(fileURLWithPath: fullPath)
+                        let extendedList = try fileURL.listExtendedAttributes()
+                        let extendedAttributes = extendedList.joined(separator: "|")
+                        
+                        // Create JSON struct for permissions of each file/folder
+                        let jsonPermissions = JSON([
+                            "posix": posixPermissions,
+                            "owner": owner,
+                            "group": group,
+                            "hidden": hidden,
+                            "create_time": createTime,
+                            "extended.attributes": extendedAttributes,
+                        ])
+                        
+                        // Create JSON struct for each file/folder, this will be appended to jsonFiles
+                        let jsonFile = JSON([
+                            "is_file": isFile,
+                            "permissions": jsonPermissions,
+                            "name": name,
+                            "access_time": accessTime,
+                            "modify_time": modifyTime,
+                            "size": size,
+                        ])
+                        jsonFiles.append(jsonFile)
+                    }
+                    // Handle TCC folders when we can't access extended attributes
+                    else {
+                        // Create JSON struct for permissions of each file/folder
+                        let jsonPermissions = JSON([
+                            "posix": "N/A",
+                            "owner": "N/A",
+                            "group": "N/A",
+                            "hidden": false,
+                            "create_time": "N/A",
+                            "extended.attributes": "N/A",
+                        ])
+                        
+                        // Create JSON struct for each file/folder, this will be appended to jsonFiles
+                        let jsonFile = JSON([
+                            "is_file": isFile,
+                            "permissions": jsonPermissions,
+                            "name": name,
+                            "access_time": "N/A",
+                            "modify_time": "N/A",
+                            "size": "N/A",
+                        ])
+                        jsonFiles.append(jsonFile)
+                    }
+                    jsonResult["files"].arrayObject = jsonFiles
+                    }
             }
         }
         else {

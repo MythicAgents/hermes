@@ -20,13 +20,19 @@ func tccFolderCheck(job: Job) {
             if let rawPtr = MDQueryGetResultAtIndex(query, i) {
                 let item = Unmanaged<MDItem>.fromOpaque(rawPtr).takeUnretainedValue()
                 if let path = MDItemCopyAttribute(item, kMDItemPath) as? String {
-                    if path == "/Users/\(username)/Desktop" {
+                    if path == "/Users/\(username)/Desktop" && !tccDesktop {
+                        // Set to true for future ls calls, will allow to read extended attributes
+                        tccDesktop = true
                         job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
-                    if path == "/Users/\(username)/Documents"{
+                    if path == "/Users/\(username)/Documents" && !tccDocuments {
+                        // Set to true for future ls calls, will allow to read extended attributes
+                        tccDocuments = true
                         job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
-                    if path == "/Users/\(username)/Downloads"{
+                    if path == "/Users/\(username)/Downloads" && !tccDownloads {
+                        // Set to true for future ls calls, will allow to read extended attributes
+                        tccDownloads = true
                         job.result += "Terminal has been granted TCC access to \(path)\n"
                     }
                 }
