@@ -4,10 +4,14 @@
   <img alt="Hermes Logo" src="agent_icons/hermes.svg" height="30%" width="30%">
 </p>
 
-Hermes is a macOS agent written in Swift 5 designed for red team operations. Hermes currently supports Mythic 2.3.
+Hermes is a macOS agent written in Swift 5 designed for red team operations.
 
 ## Installation
-Hermes requires the Darling kernel module to perform cross-compilation on the Mythic server. Install it from here https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb. It is tested for Ubuntu 20.10. After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
+Hermes currently supports Mythic 2.3.
+
+Hermes requires the [Darling kernel module](https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb) to perform cross-compilation on the Mythic server.
+
+It is tested for Ubuntu 20.10. After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
 
 To install Hermes, you'll need Mythic installed on a remote computer. You can find installation instructions for Mythic at the [Mythic project page](https://github.com/its-a-feature/Mythic/).
 
@@ -70,6 +74,12 @@ tcc_folder_checker | `tcc_folder_checker` | Run from a Terminal context to check
 unsetenv | `unsetenv [name]` | Unset an environment variable
 upload | `upload` | Use modal popup to upload a file to a remote path on the target
 whoami | `whoami` | Gather current user context
+
+## Supported C2 Profiles
+
+### [HTTP Profile](https://github.com/MythicC2Profiles/http)
+
+The HTTP profile calls back to the Mythic server over the basic, non-dynamic profile. When selecting options to be stamped into Hermes at compile time, all options are respected with the exception of those parameters related to proxy servers.
 
 ## Thank you
 
