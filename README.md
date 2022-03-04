@@ -85,6 +85,60 @@ whoami | `whoami` | Gather current user context
 
 The HTTP profile calls back to the Mythic server over the basic, non-dynamic profile. When selecting options to be stamped into Hermes at compile time, all options are respected with the exception of those parameters related to proxy servers.
 
+## Feature Showcase
+
+### File Triage
+
+The `ls` command reports back a wealth of information about files/folders such as permissions, timestamps, and extended attributes. Operators can easily sort and filter files through the Mythic UI. Clicking the `ACTIONS` button will allow operators to download files directly from `ls` output. Additionally, this hooks into Mythic's native file browser.
+
+This shows typical ls output:
+![ls browserscript](documentation-payload/ls.png)
+
+Interfaces with Mythic's filebrowser and caches data server-side:
+![mythic file browser](documentation-payload/filebrowser.png)
+
+### Process and App Listings
+
+Hermes has two different ways to retrieve information about running processes: `ps` and `list_apps`. These both will also hook into Mythic's native process browser where you can compare process output and observe change over time.
+
+This shows typical ps output: 
+![ps browserscript](documentation-payload/ps.png)
+
+This shows typical list_apps output:
+![list_apps browserscript](documentation-payload/listapps.png)
+
+Both process listing methods also interface with Mythic's builtin process browser, which allows you to see process trees more easily.
+![mythic process browser](documentation-payload/processbrowser.png)
+
+### Built-In Situational Awareness
+
+Hermes comes with multiple situational awareness techniques built-in to help understand your current access.
+
+This shows typical fda_check, get_execution_context, and tcc_folder_check output:
+![situational awareness](documentation-payload/situationalawareness.png) 
+
+### JXA and Third-Party Script Execution
+
+Hermes can execute arbitrary JXA and store a JXA script in-memory to execute functions from the script. This allows operators to extend Hermes capability using the wealth of macOS post-exploitation written in JXA.
+
+This shows typical jxa, jxa_import, and jxa_call output:
+![jxa all](documentation-payload/jxa.png)
+
+### Job Tracking
+
+Hermes tracks all jobs with a job ID, commands, and arguments passed to the command. You can kill long-running jobs with `jobkill`
+
+This shows typical jobs and jobkill output:
+![job control](documentation-payload/jobcontrol.png)
+
+### Environment Variable Control
+
+Hermes has the ability to list, set, and unset environment variables.
+
+This shows typical env, setenv, and unsetenv output:
+![env all](documentation-payload/env.png)
+
+
 ## Thank you
 
 Hermes icon made by [Freepik](https://www.flaticon.com/authors/freepik)
