@@ -87,6 +87,12 @@ The HTTP profile calls back to the Mythic server over the basic, non-dynamic pro
 
 ## Feature Showcase
 
+### Cross-Compiling macOS Payloads
+
+The Hermes docker container allows you to cross-compile Mach-O binaries from Ubuntu using [Darling](https://github.com/darlinghq/darling). No need for external build systems, build all of your payloads directly from Mythic!
+
+![crosscompiling](documentation-payload/crosscompiling.png)
+
 ### File Triage
 
 The `ls` command reports back a wealth of information about files/folders such as permissions, timestamps, and extended attributes. Operators can easily sort and filter files through the Mythic UI. Clicking the `ACTIONS` button will allow operators to download files directly from `ls` output. Additionally, this hooks into Mythic's native file browser.
@@ -99,7 +105,7 @@ Interfaces with Mythic's filebrowser and caches data server-side:
 
 ### Process and App Listings
 
-Hermes has two different ways to retrieve information about running processes: `ps` and `list_apps`. These both will also hook into Mythic's native process browser where you can compare process output and observe change over time.
+Hermes has two different ways to retrieve information about running processes: `ps` and `list_apps`. These both will also hook into Mythic's native process browser where you can compare process listing output and observe change over time.
 
 This shows typical ps output: 
 ![ps browserscript](documentation-payload/ps.png)
@@ -124,6 +130,22 @@ Hermes can execute arbitrary JXA and store a JXA script in-memory to execute fun
 This shows typical jxa, jxa_import, and jxa_call output:
 ![jxa all](documentation-payload/jxa.png)
 
+### File System Interaction
+
+Hermes has all of your classic commands for interacting with the file system:
+
+- `mv`
+- `cp`
+- `mkdir`
+- `rm`
+- `ls`
+- `cd`
+- `pwd`
+- `cat`
+
+Additionally, you can `download` files from target and `upload` files to the target:
+![download upload](documentation-payload/download_upload)
+
 ### Job Tracking
 
 Hermes tracks all jobs with a job ID, commands, and arguments passed to the command. You can kill long-running jobs with `jobkill`
@@ -138,7 +160,16 @@ Hermes has the ability to list, set, and unset environment variables.
 This shows typical env, setenv, and unsetenv output:
 ![env all](documentation-payload/env.png)
 
+### And more!
+
+There's a bunch of other small features and quality of life things that I didn't list. Install the agent and check it out for yourself!
 
 ## Thank you
 
-Hermes icon made by [Freepik](https://www.flaticon.com/authors/freepik)
+Shout out to people who have contributed to the project either by helping me fix bugs, putting out awesome research that I re-implement, and just being awesome people
+
+- Cody Thomas, [@its_a_feature_](https://twitter.com/its_a_feature_)
+- Chris Ross, [@xorrior](https://twitter.com/xorrior)
+- Cedric Owens, [@cedowens](https://twitter.com/cedowens)
+- All of the other Mythic Agent developers for their work on browser scripts and other functionality that I've re-used
+- Hermes icon made by [Freepik](https://www.flaticon.com/authors/freepik)
