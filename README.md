@@ -4,32 +4,72 @@
   <img alt="Hermes Logo" src="agent_icons/hermes.svg" height="30%" width="30%">
 </p>
 
-Hermes is a Swift 5 payload for macOS. This version currently supports Mythic 2.3 and will update as necessary. It will not work with Mythic 2.2 and lower.
+Hermes is a macOS agent written in Swift 5 designed for red team operations. Hermes currently supports Mythic 2.3.
 
-The agent has `mythic_payloadtype_container==0.0.44` PyPi package installed and reports to Mythic as version "8".
+## Installation
+Hermes requires the Darling kernel module to perform cross-compilation on the Mythic server. Install it from here https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb. It is tested for Ubuntu 20.10. After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
 
-## Prerequisites
+To install Hermes, you'll need Mythic installed on a remote computer. You can find installation instructions for Mythic at the [Mythic project page](https://github.com/its-a-feature/Mythic/).
 
-* Hermes requires the Darling kernel module to perform cross-compilation on the Mythic server. Install it from here https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb. It is tested for Ubuntu 20.10.
-* After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
+From the Mythic install directory, use the following command to install Hermes as the **root** user:
 
-## How to install an agent in this format within Mythic
+```
+./mythic-cli install github https://github.com/MythicAgents/hermes.git
+```
 
-When it's time for you to test out your install or for another user to install your agent, it's pretty simple. Within Mythic you can run the `mythic-cli` binary to install this in one of three ways:
+From the Mythic install directory, use the following command to install Hermes as a **non-root** user:
 
-* `sudo ./mythic-cli install github https://github.com/user/repo` to install the main branch
-* `sudo ./mythic-cli install github https://github.com/user/repo branchname` to install a specific branch of that repo
-* `sudo ./mythic-cli install folder /path/to/local/folder/cloned/from/github` to install from an already cloned down version of an agent repo
+```
+sudo -E ./mythic-cli install github https://github.com/MythicAgents/hermes.git
+```
 
-Now, you might be wondering _when_ should you or a user do this to properly add your agent to their Mythic instance. There's no wrong answer here, just depends on your preference. The three options are:
+Once installed, restart Mythic to build a new agent.
 
-* Mythic is already up and going, then you can run the install script and just direct that agent's containers to start (i.e. `sudo ./mythic-cli payload start agentName` and if that agent has its own special C2 containers, you'll need to start them too via `sudo ./mythic-cli c2 start c2profileName`).
-* Mythic is already up and going, but you want to minimize your steps, you can just install the agent and run `sudo ./mythic-cli mythic start`. That script will first _stop_ all of your containers, then start everything back up again. This will also bring in the new agent you just installed.
-* Mythic isn't running, you can install the script and just run `sudo ./mythic-cli mythic start`. 
+## Notable Features
+- Cross-compiling macOS payloads from Ubuntu using Darling
+- Ability to load and execute JXA scripts in-memory
+- Various macOS situational awareness techniques
+- Upload/download
+- Full file system access (ls, mv, cp, mkdir, cd, etc.)
 
-## Building Hermes within Mythic
+## Commands Manual Quick Reference
 
-The first time to build Hermes from Mythic, Command Line Tools need to be installed within the Hermes container. This is done automatically for you upon first build and can take up to ~5 minutes.
+Command | Syntax | Description
+------- | ------ | -----------
+cat | `cat [file]` | Retrieve the output of a file
+cd | `cd [directory]` | Change current directory
+clipboard | `clipboard` | Monitor the clipboard for paste events. Manually stop this job with `jobkill`
+cp | `cp [source] [destination]` | Copy a file
+download | `download [file]` | Download a file from the target
+env | `env` | List environment variables
+exit | `exit` | Task agent to exit
+fda_check | `fda_check` | Attempt to open a file handle to `~/Library/Application\ Support/com.apple.TCC/TCC.db` to determine if you have `Full Disk Access`
+get_execution_context | `get_execution_context` | Read environment variables to determine payload execution context
+hostname | `hostname` | Gather hostname information
+ifconfig | `ifconfig` | Gather IP addresses
+jobkill | `jobkill [jobID]` | Kill a running job by ID
+jobs | `jobs` | List running jobs
+jxa | `jxa {"code" : "Math.PI"}` | Execute JXA code
+jxa_call | `jxa_call [function]` | Execute JXA functions from an uploaded script, upload JXA scripts into memory with `jxa_import`
+jxa_import | `jxa_import` | Use modal popup to upload JXA script into agent memory, call functions with `jxa_call`
+list_apps | `list_apps` | List running applications with `NSApplication.RunningApplications`
+list_tcc | `list_tcc [TCC.db file]` | Lists entries in TCC database (requires Full Disk Access). Schema currently only supports Big Sur
+ls | `ls [path]` | List files and folders for a directory. Use `ls .` for current directory
+mkdir | `mkdir [directory]` | Create a directory
+mv | `mv [source] [destination]` | Move a file from source to destination
+plist_print | `plist_print [file]` | Retrive contents of plist file. Supports JSON, XML, and binary
+ps | `ps` | List process information
+pwd | `pwd` | Print working directory
+rm | `rm [path]` | Remove a file or directory
+run | `run [/bin/slyd0g] [arguments]` | Execute a binary on disc with arguments
+screenshot | `screenshot` | Capture all connected displays in-memory and send it back over the C2 channel, requires `Screen Recording` permissions
+setenv | `setenv [name] [value]` | Set an environment variable, will overwrite existing
+shell | `shell [command]` | Execute a shell command with `/bin/bash -c`
+sleep | `sleep [seconds] [percentage]` | Set the callback interval of the agent in seconds with a percentage for jitter
+tcc_folder_checker | `tcc_folder_checker` | Run from a Terminal context to check access to TCC-protected folders: `~/Downloads`, `~/Desktop`, `~/Documents`
+unsetenv | `unsetenv [name]` | Unset an environment variable
+upload | `upload` | Use modal popup to upload a file to a remote path on the target
+whoami | `whoami` | Gather current user context
 
 ## Thank you
 

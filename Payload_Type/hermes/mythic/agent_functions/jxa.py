@@ -30,7 +30,7 @@ class JxaCommand(CommandBase):
     cmd = "jxa"
     needs_admin = False
     help_cmd = 'jxa {  "code": "ObjC.import(\'Cocoa\'); $.NSBeep();" }'
-    description = "Execute jxa code."
+    description = "Execute JXA code."
     version = 1
     author = "@slyd0g"
     argument_class = JxaArguments
