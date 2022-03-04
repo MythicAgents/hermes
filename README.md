@@ -144,7 +144,7 @@ Hermes has all of your classic commands for interacting with the file system:
 - `cat`
 
 Additionally, you can `download` files from target and `upload` files to the target:
-![download upload](documentation-payload/download_upload)
+![download upload](documentation-payload/download_upload.png)
 
 ### Job Tracking
 
