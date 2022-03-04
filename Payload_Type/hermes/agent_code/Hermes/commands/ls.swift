@@ -89,7 +89,7 @@ func ls(job: Job) {
                         // Determine access_time, modify_time, and size
                         // Return blank access time, we will return modify_time within permissions JSON
                         let accessTime = ""
-                        let modifyTime = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970
+                        let modifyTime = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970 * 1000
                         let size = attributes[FileAttributeKey.size] as! UInt64
                         
                         // Get all fields for permissions JSON
@@ -97,7 +97,7 @@ func ls(job: Job) {
                         let owner = attributes[FileAttributeKey.ownerAccountName] as? String
                         let group = attributes[FileAttributeKey.groupOwnerAccountName] as? String
                         let hidden = attributes[FileAttributeKey.extensionHidden] as? Bool
-                        let createTime = (attributes[FileAttributeKey.creationDate] as! Date).timeIntervalSince1970
+                        let createTime = (attributes[FileAttributeKey.creationDate] as! Date).timeIntervalSince1970 * 1000
                         
                         // Get extended attributes
                         var xattrList = [String: String]()
@@ -191,13 +191,13 @@ func ls(job: Job) {
         
         jsonResult["access_time"].stringValue = ""
         jsonResult["size"].uInt64Value = attributes[FileAttributeKey.size] as! UInt64
-        jsonResult["modify_time"].doubleValue = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970
+        jsonResult["modify_time"].doubleValue = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970 * 1000
     
         // Get all fields for permissions JSON
         let owner = attributes[FileAttributeKey.ownerAccountName] as? String
         let group = attributes[FileAttributeKey.groupOwnerAccountName] as? String
         let hidden = attributes[FileAttributeKey.extensionHidden] as? Bool
-        let createTime = (attributes[FileAttributeKey.creationDate] as! Date).timeIntervalSince1970
+        let createTime = (attributes[FileAttributeKey.creationDate] as! Date).timeIntervalSince1970 * 1000
         
         // Get extended attributes
         var xattrList = [String: String]()
