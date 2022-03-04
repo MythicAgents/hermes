@@ -11,7 +11,11 @@ Hermes currently supports Mythic 2.3.
 
 Hermes requires the [Darling kernel module](https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb) to perform cross-compilation on the Mythic server.
 
-It is tested for Ubuntu 20.10. After installing the Darling kernel module, as root, run `modprobe darling-mach` before starting the Hermes container
+It is tested for Ubuntu 20.10. After installing the Darling kernel module, as **root**, load the kernel module before starting the Hermes container:
+
+```
+modprobe darling-mach
+```
 
 To install Hermes, you'll need Mythic installed on a remote computer. You can find installation instructions for Mythic at the [Mythic project page](https://github.com/its-a-feature/Mythic/).
 
