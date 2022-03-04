@@ -58,25 +58,24 @@ func downloadScreenshotChunk(job: Job) {
     let screenShot:CGImage = CGDisplayCreateImage(activeDisplays[job.screenshotDisplayNumber])!
     let bitmapRep = NSBitmapImageRep(cgImage: screenShot)
     let jpegData = bitmapRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [:])!
+    job.downloadFileSize = jpegData.count
     
     // This will start at 0, then go to 512000, and so on
     let offset = UInt64((job.downloadChunkNumber - 1) * 512000)
-    
+
     // Read as much data as possible 512kb until the last chunk
     if job.downloadChunkNumber < job.downloadTotalChunks {
         // Read data and convert to b64
         let data = jpegData[offset ..< (offset + 512000)]
         let b64Data = toBase64(data: data)
-        print("CHUNK_SIZE", data.count)
         
         job.downloadChunkData = b64Data
     }
     // Last chunk read only the remaining data
     else if job.downloadChunkNumber == job.downloadTotalChunks {
         // Read remainder data and convert to b64
-        let data = jpegData[Int(offset) ..< job.downloadFileSize]
+        let data = jpegData[Data.Index(offset) ..< job.downloadFileSize]
         let b64Data = toBase64(data: data)
-        print("LAST_CHUNK_SIZE", data.count)
         
         job.downloadChunkData = b64Data
     }

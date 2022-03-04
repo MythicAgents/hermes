@@ -3,22 +3,32 @@ import json
 
 
 class MvArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "source": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="source",
                 type=ParameterType.String,
                 description="Source file to move.",
-                ui_position=1
+                parameter_group_info=[
+                    ParameterGroupInfo(
+                        ui_position=1,
+                        required=True
+                    )
+                ]
             ),
-            "destination": CommandParameter(
+            CommandParameter(
                 name="destination",
                 type=ParameterType.String,
                 description="Source will move to this location",
-                ui_position=2
+                parameter_group_info=[
+                    ParameterGroupInfo(
+                        ui_position=2,
+                        required=True
+                    )
+                ]
             ),
-        }
+        ]
 
     async def parse_arguments(self):
         if len(self.command_line) == 0:

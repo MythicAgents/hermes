@@ -13,6 +13,8 @@ func fullDiskAccessCheck(job: Job) {
         path = NSString(string: path).expandingTildeInPath
         _ = try Data(contentsOf: URL(fileURLWithPath: path))
         
+        // Set to true for future ls calls, will allow to read extended attributes
+        tccFullDiskAccess = true
         job.result = "\"Full Disk Access\" is enabled!"
         job.completed = true
         job.success = true

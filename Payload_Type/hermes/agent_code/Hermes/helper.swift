@@ -150,6 +150,28 @@ extension Date
 
 // https://stackoverflow.com/questions/38343186/write-extend-file-attributes-swift-example
 extension URL {
+    /// Get extended attribute.
+    func extendedAttribute(forName name: String) throws -> Data  {
+
+        let data = try self.withUnsafeFileSystemRepresentation { fileSystemPath -> Data in
+
+            // Determine attribute size:
+            let length = getxattr(fileSystemPath, name, nil, 0, 0, 0)
+            guard length >= 0 else { throw URL.posixError(errno) }
+
+            // Create buffer with required size:
+            var data = Data(count: length)
+
+            // Retrieve attribute:
+            let result =  data.withUnsafeMutableBytes { [count = data.count] in
+                getxattr(fileSystemPath, name, $0.baseAddress, count, 0, 0)
+            }
+            guard result >= 0 else { throw URL.posixError(errno) }
+            return data
+        }
+        return data
+    }
+    
     /// Get list of all extended attributes.
     func listExtendedAttributes() throws -> [String] {
         

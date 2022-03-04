@@ -4,20 +4,20 @@ from mythic_payloadtype_container.MythicRPC import *
 
 
 class DownloadArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {}
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = []
 
     async def parse_arguments(self):
         if len(self.command_line) > 0:
             if self.command_line[0] == "{":
                 temp_json = json.loads(self.command_line)
                 if "host" in temp_json:
-                    # this means we have tasking from the file browser rather than the popup UI
-                    # the apfell agent doesn't currently have the ability to do _remote_ listings, so we ignore it
                     self.command_line = temp_json["path"] + "/" + temp_json["file"]
                 else:
                     raise Exception("Unsupported JSON")
+        else:
+            raise Exception("Must provide a path to download")
 
 
 class DownloadCommand(CommandBase):
@@ -31,7 +31,8 @@ class DownloadCommand(CommandBase):
     parameters = []
     attackmapping = ["T1020", "T1030", "T1041"]
     argument_class = DownloadArguments
-    browser_script = BrowserScript(script_name="download", author="@its_a_feature_")
+    browser_script = [BrowserScript(script_name="download", author="@its_a_feature_"),
+                      BrowserScript(script_name="download_new", author="@its_a_feature_", for_new_ui=True)]
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
         resp = await MythicRPC().execute("create_artifact", task_id=task.id,

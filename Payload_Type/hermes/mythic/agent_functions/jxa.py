@@ -3,15 +3,15 @@ import base64
 
 
 class JxaArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "code": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="code",
                 type=ParameterType.String,
                 description="JXA Code to execute.",
             )
-        }
+        ]
 
     async def parse_arguments(self):
         if len(self.command_line) == 0:
@@ -30,11 +30,11 @@ class JxaCommand(CommandBase):
     cmd = "jxa"
     needs_admin = False
     help_cmd = 'jxa {  "code": "ObjC.import(\'Cocoa\'); $.NSBeep();" }'
-    description = "Execute jxa code."
+    description = "Execute JXA code."
     version = 1
     author = "@slyd0g"
     argument_class = JxaArguments
-    attackmapping = ["T1059"]
+    attackmapping = ["T1059.002"]
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
         return task

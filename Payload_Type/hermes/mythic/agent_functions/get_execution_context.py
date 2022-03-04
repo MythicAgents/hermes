@@ -2,7 +2,7 @@ from mythic_payloadtype_container.MythicCommandBase import *
 import json
 
 
-class CatArguments(TaskArguments):
+class GetExecutionContextArguments(TaskArguments):
     def __init__(self, command_line, **kwargs):
         super().__init__(command_line, **kwargs)
         self.args = []
@@ -11,16 +11,16 @@ class CatArguments(TaskArguments):
         pass
 
 
-class CatCommand(CommandBase):
-    cmd = "cat"
+class GetExecutionContextCommand(CommandBase):
+    cmd = "get_execution_context"
     needs_admin = False
-    help_cmd = "cat [file path]"
-    description = "Return contents of a file as a string."
+    help_cmd = "get_execution_context"
+    description = "Check various environment variables to determine execution context. Technique inspired by @cedowens who also implemented this check in https://github.com/cedowens/SwiftBelt"
     version = 1
     author = "@slyd0g"
-    argument_class = CatArguments
-    attackmapping = ["T1005"]
-
+    argument_class = GetExecutionContextArguments
+    attackmapping = ["T1592"]
+    
     async def create_tasking(self, task: MythicTask) -> MythicTask:
         return task
 

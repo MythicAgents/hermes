@@ -3,26 +3,34 @@ import json
 
 
 class SleepArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "jitter": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="jitter",
                 type=ParameterType.Number,
-                required=False,
                 description="Jitter percentage.",
                 default_value=-1,
-                ui_position=2
+                parameter_group_info=[
+                    ParameterGroupInfo(
+                        ui_position=2,
+                        required=False
+                    )
+                ]
             ),
-            "interval": CommandParameter(
+            CommandParameter(
                 name="interval",
                 type=ParameterType.Number,
-                required=True,
                 description="Sleep time in seconds",
                 default_value=-1,
-                ui_position=1
+                parameter_group_info=[
+                    ParameterGroupInfo(
+                        ui_position=1,
+                        required=True
+                    )
+                ]
             ),
-        }
+        ]
 
     async def parse_arguments(self):
         if len(self.command_line) > 0:

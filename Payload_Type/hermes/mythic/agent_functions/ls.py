@@ -5,30 +5,27 @@ import sys
 
 
 class LsArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "path": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="path",
                 type=ParameterType.String,
                 default_value=".",
                 description="Path of file or folder on the current system to list",
             )
-        }
+        ]
 
     async def parse_arguments(self):
-        if len(self.command_line) > 0:
-            if self.command_line[0] == "{":
-                temp_json = json.loads(self.command_line)
-                if "host" in temp_json:
-                    # this means we have tasking from the file browser rather than the popup UI
-                    # the hermes agent doesn't currently have the ability to do _remote_ listings, so we ignore it
-                    self.add_arg("path", temp_json["path"] + "/" + temp_json["file"])
-                    self.add_arg("file_browser", True, type=ParameterType.Boolean)
-                else:
-                    self.add_arg("path", temp_json["path"])
-            else:
-                self.add_arg("path", self.command_line)
+        self.add_arg("path", self.command_line)
+
+    async def parse_dictionary(self, dictionary):
+        if "host" in dictionary:
+            # then this came from the file browser
+            self.add_arg("path", dictionary["path"] + "/" + dictionary["file"])
+            self.add_arg("file_browser", type=ParameterType.Boolean, value=True)
+        else:
+            self.load_args_from_dictionary(dictionary)
 
 
 class LsCommand(CommandBase):
@@ -41,7 +38,8 @@ class LsCommand(CommandBase):
     attackmapping = ["T1106", "T1083"]
     supported_ui_features = ["file_browser:list"]
     argument_class = LsArguments
-    browser_script = [BrowserScript(script_name="ls", author="@its_a_feature_")]
+    browser_script = [BrowserScript(script_name="ls", author="@its_a_feature_"),
+                      BrowserScript(script_name="ls_new", author="@its_a_feature_", for_new_ui=True)]
     attributes = CommandAttributes(
         spawn_and_injectable=True,
         supported_os=[SupportedOS.MacOS],

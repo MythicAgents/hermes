@@ -3,15 +3,16 @@ import json
 
 
 class JXACallArguments(TaskArguments):
-    def __init__(self, command_line):
-        super().__init__(command_line)
-        self.args = {
-            "command": CommandParameter(
+    def __init__(self, command_line, **kwargs):
+        super().__init__(command_line, **kwargs)
+        self.args = [
+            CommandParameter(
                 name="command",
                 type=ParameterType.String,
-                description="The command to execute within a file loaded via jxa_import",
+                description="The function to execute within a file loaded via jxa_import",
+                parameter_group_info=[ParameterGroupInfo()]
             )
-        }
+        ]
 
     async def parse_arguments(self):
         if len(self.command_line) > 0:
@@ -31,7 +32,7 @@ class JXACallCommand(CommandBase):
     description = "Call a function from within the JS file that was imported with 'jxa_import'. This function call is appended to the end of the jxa_import code and called via eval."
     version = 1
     author = "@slyd0g"
-    attackmapping = ["T1059"]
+    attackmapping = ["T1059.002"]
     argument_class = JXACallArguments
 
     async def create_tasking(self, task: MythicTask) -> MythicTask:
