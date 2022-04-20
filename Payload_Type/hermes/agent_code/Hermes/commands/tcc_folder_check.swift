@@ -23,17 +23,17 @@ func tccFolderCheck(job: Job) {
                     if path == "/Users/\(username)/Desktop" && !tccDesktop {
                         // Set to true for future ls calls, will allow to read extended attributes
                         tccDesktop = true
-                        job.result += "Terminal has been granted TCC access to \(path)\n"
+                        job.result += "This app has been granted TCC access to \(path)\n"
                     }
                     if path == "/Users/\(username)/Documents" && !tccDocuments {
                         // Set to true for future ls calls, will allow to read extended attributes
                         tccDocuments = true
-                        job.result += "Terminal has been granted TCC access to \(path)\n"
+                        job.result += "This app has been granted TCC access to \(path)\n"
                     }
                     if path == "/Users/\(username)/Downloads" && !tccDownloads {
                         // Set to true for future ls calls, will allow to read extended attributes
                         tccDownloads = true
-                        job.result += "Terminal has been granted TCC access to \(path)\n"
+                        job.result += "This app has been granted TCC access to \(path)\n"
                     }
                 }
             }
