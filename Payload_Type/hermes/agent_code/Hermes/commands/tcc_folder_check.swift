@@ -41,7 +41,7 @@ func tccFolderCheck(job: Job) {
     }
     
     if job.result == "" {
-        job.result = "Terminal has not been granted access to TCC-protected folders."
+        job.result = "This app has not been granted access to TCC-protected folders."
     }
     job.completed = true
     job.success = true
