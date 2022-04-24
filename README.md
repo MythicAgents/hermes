@@ -74,7 +74,7 @@ screenshot | `screenshot` | Capture all connected displays in-memory and send it
 setenv | `setenv [name] [value]` | Set an environment variable, will overwrite existing
 shell | `shell [command]` | Execute a shell command with `/bin/bash -c`
 sleep | `sleep [seconds] [percentage]` | Set the callback interval of the agent in seconds with a percentage for jitter
-tcc_folder_checker | `tcc_folder_checker` | Run from a Terminal context to check access to TCC-protected folders: `~/Downloads`, `~/Desktop`, `~/Documents`
+tcc_folder_checker | `tcc_folder_checker` | Use mdquery API to check access to TCC-protected folders: `~/Downloads`, `~/Desktop`, `~/Documents`
 unsetenv | `unsetenv [name]` | Unset an environment variable
 upload | `upload` | Use modal popup to upload a file to a remote path on the target
 whoami | `whoami` | Gather current user context
