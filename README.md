@@ -44,6 +44,7 @@ Once installed, restart Mythic to build a new agent.
 
 Command | Syntax | Description
 ------- | ------ | -----------
+accessibility_check | `accessibility_check` | Use `AXIsProcessTrusted()` to determine if you have the `Accessibility` permission
 cat | `cat [file]` | Retrieve the output of a file
 cd | `cd [directory]` | Change current directory
 clipboard | `clipboard` | Monitor the clipboard for paste events. Manually stop this job with `jobkill`

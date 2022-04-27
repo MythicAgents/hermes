@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F1221102819B4CC009CBCD0 /* accessibility_check.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F12210F2819B4CC009CBCD0 /* accessibility_check.swift */; };
 		3F35F4A726DD53DE00E01BA4 /* plist_print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F35F4A626DD53DE00E01BA4 /* plist_print.swift */; };
 		3F5B3A0F26962D7B00C84927 /* clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A0E26962D7B00C84927 /* clipboard.swift */; };
 		3F5B3A112698B96F00C84927 /* screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A102698B96F00C84927 /* screenshot.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F12210F2819B4CC009CBCD0 /* accessibility_check.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accessibility_check.swift; sourceTree = "<group>"; };
 		3F35F4A626DD53DE00E01BA4 /* plist_print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plist_print.swift; sourceTree = "<group>"; };
 		3F5B3A0E26962D7B00C84927 /* clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clipboard.swift; sourceTree = "<group>"; };
 		3F5B3A102698B96F00C84927 /* screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = screenshot.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				3FAAFA25266DD15A00C2E539 /* pwd.swift */,
 				3FA0ABFE27CFF55F00796775 /* get_execution_context.swift */,
 				3FA0AC0027CFF83100796775 /* tcc_folder_check.swift */,
+				3F12210F2819B4CC009CBCD0 /* accessibility_check.swift */,
 			);
 			path = commands;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */,
 				3FA0AC0127CFF83100796775 /* tcc_folder_check.swift in Sources */,
 				3FAAFA3A266DD2EB00C2E539 /* jobkill.swift in Sources */,
+				3F1221102819B4CC009CBCD0 /* accessibility_check.swift in Sources */,
 				3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */,
 				3F814A9926BDDD750085BF78 /* jxa.swift in Sources */,
 				3FC3786D26B217C000C8DBA4 /* mv.swift in Sources */,

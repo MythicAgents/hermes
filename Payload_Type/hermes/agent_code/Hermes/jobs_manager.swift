@@ -303,6 +303,8 @@ func executeTask(job: Job, jobList: JobList) {
         getExecutionContext(job: job)
     case "tcc_folder_check":
         tccFolderCheck(job: job)
+    case "accessibility_check":
+        accessibilityCheck(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
