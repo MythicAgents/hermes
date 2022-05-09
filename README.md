@@ -52,7 +52,7 @@ cp | `cp [source] [destination]` | Copy a file
 download | `download [file]` | Download a file from the target
 env | `env` | List environment variables
 exit | `exit` | Task agent to exit
-fda_check | `fda_check` | Attempt to open a file handle to `~/Library/Application\ Support/com.apple.TCC/TCC.db` to determine if you have `Full Disk Access`
+fda_check | `fda_check` | Determine if you have `Full Disk Access` permissions, multiple methods available
 get_execution_context | `get_execution_context` | Read environment variables to determine payload execution context
 hostname | `hostname` | Gather hostname information
 ifconfig | `ifconfig` | Gather IP addresses
