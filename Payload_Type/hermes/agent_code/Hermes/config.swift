@@ -45,5 +45,5 @@ var agentConfig = AgentConfig(
 
     sleep: 5,
     jitter: 5,
-    killDate: "2022-05-01"
+    killDate: "2024-05-01"
 )

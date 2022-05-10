@@ -26,6 +26,8 @@ class FullDiskAccessCheckArguments(TaskArguments):
             raise Exception("Must supply an enumeration technique")
         pass
 
+    async def parse_dictionary(self, dictionary_arguments):
+        self.load_args_from_dictionary(dictionary_arguments)
 
 class FullDiskAccessCheckCommand(CommandBase):
     cmd = "fda_check"
