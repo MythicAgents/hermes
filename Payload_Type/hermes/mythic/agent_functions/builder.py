@@ -24,8 +24,14 @@ class Hermes(PayloadType):
         BuildParameter(
             name="version",
             parameter_type=BuildParameterType.ChooseOne,
-            description="Choose a target macOS version (Catalina, Big Sur)",
-            choices=["10.15", "10.16"],
+            description="Choose a target macOS version (Catalina, Big Sur and above)",
+            choices=["10.15", "11"],
+        ),
+        BuildParameter(
+            name="architecture",
+            parameter_type=BuildParameterType.ChooseOne,
+            description="Choose a target architecture",
+            choices=["x86_64", "arm64", "universal"],
         ),
     ]
     #  the names of the c2 profiles that your agent supports
@@ -41,6 +47,7 @@ class Hermes(PayloadType):
 
         # get version parameter from Mythic
         target_version = self.get_parameter("version")
+        target_architecture = self.get_parameter("architecture")
 
         try:
             # Copy backup config to config.swift, open it for reading, read data
@@ -106,34 +113,99 @@ class Hermes(PayloadType):
             config_file.write(data)
             config_file.close()
 
-            # setup build command
-            command = '/usr/libexec/darling/bin/bash -c "xcode-select -s /Library/Developer/CommandLineTools; swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes -target x86_64-apple-macosx{version} -static-stdlib"'.format(version=target_version)
+            # trigger different architecture builds here
+            if target_architecture == "x86_64" or target_architecture == "arm64":
+                # setup build command
+                command = '/usr/libexec/darling/bin/bash -c "export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk; xcode-select -s /Library/Developer/CommandLineTools; /Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes_{arch}_macosx{version} -target {arch}-apple-macosx{version}"'.format(version=target_version, arch=target_architecture)
 
-            # build Hermes
-            proc = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                cwd="/Mythic/agent_code/Hermes/",
-            )
+                # build Hermes
+                proc = await asyncio.create_subprocess_shell(
+                    command,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    cwd="/Mythic/agent_code/Hermes/",
+                )
 
-            # Collect and data written Standard Output and Standard Error
-            stdout, stderr = await proc.communicate()
-            if stdout:
-                resp.build_stdout += f"\n[STDOUT]\n{stdout.decode()}"
-            if stderr:
-                resp.build_stderr += f"\n[STDERR]\n{stderr.decode()}"
+                # Collect and data written Standard Output and Standard Error
+                stdout, stderr = await proc.communicate()
+                if stdout:
+                    resp.build_stdout += f"\n[STDOUT]\n{stdout.decode()}"
+                if stderr:
+                    resp.build_stderr += f"\n[STDERR]\n{stderr.decode()}"
 
-            # get built file
-            if os.path.exists("/Mythic/agent_code/Hermes/hermes"):
-                resp.payload = open("/Mythic/agent_code/Hermes/hermes", "rb").read()
+                # get built file
+                bin_path = "/Mythic/agent_code/Hermes/hermes_{arch}_macosx{version}".format(version=target_version, arch=target_architecture)
+                if os.path.exists(bin_path):
+                    resp.payload = open(bin_path, "rb").read()
 
-            # Successfully created the payload without error
-            resp.build_message += f'\nCreated Hermes payload!\n' \
-                                  f'OS: {target_version}, ' \
-                                  f'C2 Profile: {profile}\n'
-            resp.status = BuildStatus.Success
-            return resp
+                # Successfully created the payload without error
+                resp.build_message += f'\nCreated Hermes payload!\n' \
+                                    f'OS: {target_version}, ' \
+                                    f'Arch: {target_architecture}, ' \
+                                    f'C2 Profile: {profile}\n'
+                resp.status = BuildStatus.Success
+                return resp
+            elif target_architecture == "universal":
+                # setup build command
+                command = '/usr/libexec/darling/bin/bash -c "export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk; xcode-select -s /Library/Developer/CommandLineTools; /Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes_x86_64 -target x86_64-apple-macosx{version}"'.format(version=target_version)
+                command2 = '/usr/libexec/darling/bin/bash -c "export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk; xcode-select -s /Library/Developer/CommandLineTools; /Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* -o hermes_arm64 -target arm64-apple-macosx{version}"'.format(version=target_version)
+
+                # build Hermes both architecture
+                proc = await asyncio.create_subprocess_shell(
+                    command,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    cwd="/Mythic/agent_code/Hermes/",
+                )
+
+                proc2 = await asyncio.create_subprocess_shell(
+                    command2,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    cwd="/Mythic/agent_code/Hermes/",
+                )
+
+                # Collect and data written Standard Output and Standard Error
+                stdout, stderr = await proc.communicate()
+                if stdout:
+                    resp.build_stdout += f"\n[STDOUT]\n{stdout.decode()}"
+                if stderr:
+                    resp.build_stderr += f"\n[STDERR]\n{stderr.decode()}"
+                stdout2, stderr2 = await proc2.communicate()
+                if stdout2:
+                    resp.build_stdout += f"\n[STDOUT]\n{stdout2.decode()}"
+                if stderr2:
+                    resp.build_stderr += f"\n[STDERR]\n{stderr2.decode()}"
+
+                # Combine Hermes with lipo
+                await proc.wait()
+                await proc2.wait()
+                command3 = '/usr/libexec/darling/bin/bash -c "/Library/Developer/CommandLineTools/usr/bin/lipo -create hermes_x86_64 hermes_arm64 -output hermes_universal_macosx{version}"'.format(version=target_version)
+                proc3 = await asyncio.create_subprocess_shell(
+                    command3,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    cwd="/Mythic/agent_code/Hermes/",
+                )
+                stdout3, stderr3 = await proc3.communicate()
+                if stdout3:
+                    resp.build_stdout += f"\n[STDOUT]\n{stdout3.decode()}"
+                if stderr3:
+                    resp.build_stderr += f"\n[STDERR]\n{stderr3.decode()}"
+
+                # get built file
+                bin_path = "/Mythic/agent_code/Hermes/hermes_universal_macosx{version}".format(version=target_version)
+                if os.path.exists(bin_path):
+                    resp.payload = open(bin_path, "rb").read()
+
+                # Successfully created the payload without error
+                resp.build_message += f'\nCreated Hermes payload!\n' \
+                                    f'OS: {target_version}, ' \
+                                    f'Arch: {target_architecture}, ' \
+                                    f'C2 Profile: {profile}\n'
+                resp.status = BuildStatus.Success
+                return resp
+
 
         except Exception as e:
             resp.build_stderr += "\n" + str(e)

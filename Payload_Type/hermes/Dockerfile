@@ -1,2 +1,2 @@
-From slyd0g/hermes:mythic_2.3
-# Dockerfile source: https://drive.google.com/file/d/1pr8GGYa7QfGJAbOYKIB0g8bnTsdoxGgC/view?usp=sharing
+From slyd0g/hermes:universal
+# Dockerfile source: https://drive.google.com/file/d/163b319YMV6EUjzSGXDf_G8CW1Sky1c21/view?usp=sharing
