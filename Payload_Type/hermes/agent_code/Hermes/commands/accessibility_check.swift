@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ApplicationServices
 
 func accessibilityCheck(job: Job) {
     if AXIsProcessTrusted() {
