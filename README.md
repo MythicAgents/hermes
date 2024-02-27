@@ -7,15 +7,7 @@
 Hermes is a macOS agent written in Swift 5 designed for red team operations.
 
 ## Installation
-Hermes currently supports Mythic 2.3.
-
-Hermes requires the [Darling kernel module](https://github.com/darlinghq/darling/releases/download/v0.1.20210224/darling-dkms_0.1.20210224.testing_amd64.deb) to perform cross-compilation on the Mythic server.
-
-It is tested for Ubuntu 20.10. After installing the Darling kernel module, as **root**, load the kernel module before starting the Hermes container:
-
-```
-modprobe darling-mach
-```
+Hermes currently supports Mythic 3.0.
 
 To install Hermes, you'll need Mythic installed on a remote computer. You can find installation instructions for Mythic at the [Mythic project page](https://github.com/its-a-feature/Mythic/).
 
@@ -34,7 +26,7 @@ sudo -E ./mythic-cli install github https://github.com/MythicAgents/hermes.git
 Once installed, restart Mythic to build a new agent.
 
 ## Notable Features
-- Cross-compiling macOS payloads from Ubuntu using Darling
+- Cross-compiling macOS payloads from Linux using Darling
 - Ability to load and execute JXA scripts in-memory
 - Various macOS situational awareness techniques
 - Upload/download
