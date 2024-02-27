@@ -30,7 +30,7 @@ class ListTccCommand(CommandBase):
     cmd = "list_tcc"
     needs_admin = False
     help_cmd = "list_tcc [db_path]"
-    description = "Lists entries in TCC database (requires Full Disk Access). Schema currently only supports Big Sur"
+    description = "Lists entries in TCC database (requires Full Disk Access). Schema currently supports Sonoma (may still work on previous versions)"
     version = 1
     author = "@slyd0g"
     attackmapping = ["T1592"]

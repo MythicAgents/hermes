@@ -27,14 +27,13 @@ func fullDiskAccessCheck(job: Job) {
         else if technique == "mdquery" {
             var pathFound = false
             let queryString = "kMDItemDisplayName = *TCC.db"
-            let username = NSUserName()
             if let query = MDQueryCreate(kCFAllocatorDefault, queryString as CFString, nil, nil) {
                 MDQueryExecute(query, CFOptionFlags(kMDQuerySynchronous.rawValue))
                 for i in 0..<MDQueryGetResultCount(query) {
                     if let rawPtr = MDQueryGetResultAtIndex(query, i) {
                         let item = Unmanaged<MDItem>.fromOpaque(rawPtr).takeUnretainedValue()
                         if let path = MDItemCopyAttribute(item, kMDItemPath) as? String {
-                            if path.hasSuffix("/Users/\(username)/Library/Application Support/com.apple.TCC/TCC.db"){
+                            if path.hasSuffix("/Library/Application Support/com.apple.TCC/TCC.db"){
                                 pathFound = true
                             }
                         }
@@ -42,7 +41,7 @@ func fullDiskAccessCheck(job: Job) {
                 }
                 if pathFound {
                     // Set to true for future ls calls, will allow to read extended attributes
-                    tccFullDiskAccess = true
+                    tccFullDiskAccess = true 
                     job.result = "\"Full Disk Access\" is enabled!"
                     job.completed = true
                     job.success = true

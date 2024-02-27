@@ -18,36 +18,30 @@ func listApplications(job: Job) {
         let arch = app.executableArchitecture
 
         // Parse architecture
-        var machoArch = ""
-        if (arch == NSBundleExecutableArchitectureI386)
-        {
+        var machoArch: String
+        switch arch {
+        case NSBundleExecutableArchitectureARM64:
+            machoArch = "x64 ARM"
+        case NSBundleExecutableArchitectureI386:
             machoArch = "x86 Intel"
-        }
-        else if (arch == NSBundleExecutableArchitectureX86_64)
-        {
+        case NSBundleExecutableArchitectureX86_64:
             machoArch = "x64 Intel"
-        }
-        else if (arch == NSBundleExecutableArchitecturePPC)
-        {
+        case NSBundleExecutableArchitecturePPC:
             machoArch = "x86 PowerPC"
-        }
-        else if (arch == NSBundleExecutableArchitecturePPC64)
-        {
+        case NSBundleExecutableArchitecturePPC64:
             machoArch = "x64 PowerPC"
-        }
-        else
-        {
-            machoArch = "Unknown architecture"
+        default:
+            machoArch = "Unknown Architecture"
         }
 
         let jsonPayload = JSON([
             "frontMost": app.isActive,
             "hidden": app.isHidden,
-            "bundle": app.bundleIdentifier,
+            "bundle": app.bundleIdentifier ?? "could not determine bundle identifier",
             "bundleURL": app.bundleURL?.path,
             "bin_path": app.executableURL?.path,
             "process_id": app.processIdentifier,
-            "name": app.localizedName ?? "Could not get local name",
+            "name": app.localizedName ?? "could not get local name",
             "architecture": machoArch,
             ])
         jsonApplications.append(jsonPayload)

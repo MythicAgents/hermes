@@ -25,6 +25,13 @@ func getFileID(job: Job, isScreenshot: Bool) {
             if (path.prefix(1) == "~") {
                 path = NSString(string: path).expandingTildeInPath
             }
+
+            // If relative download path was passed, add current directory to the path
+            if (!path.contains("/")) {
+                let fileManager = FileManager.default
+                let workingDir = fileManager.currentDirectoryPath
+                path = workingDir + "/" + path
+            }
             
             var isDir : ObjCBool = false
             if fileManager.fileExists(atPath: path, isDirectory:&isDir) {
@@ -85,6 +92,7 @@ func getFileID(job: Job, isScreenshot: Bool) {
             job.downloadIsScreenshot = isScreenshot
             job.downloadHost = ""
             job.result = ""
+            job.status = "processed"
         }
     }
     catch {
@@ -104,7 +112,6 @@ func downloadChunk(job: Job) {
     
     // Use seek to move to appropriate position within the file
     fileHandle?.seek(toFileOffset: offset)
-    
     // Read as much data as possible 512kb until the last chunk
     if job.downloadChunkNumber < job.downloadTotalChunks {
         // Read data and convert to b64
@@ -120,8 +127,15 @@ func downloadChunk(job: Job) {
         let data = (fileHandle?.readData(ofLength: length) ?? toData(string: " ")) as Data
         let b64Data = toBase64(data: data)
         
+
+        let jsonResult = JSON([
+            "total_chunks": job.downloadTotalChunks,
+            "agent_file_id": job.downloadFileID,
+        ])
+        job.result = jsonResult.rawString()!
         job.downloadChunkData = b64Data
         job.completed = true
         job.success = true
+        job.status = "success"
     }
 }

@@ -84,6 +84,8 @@ func listTCCDatabase(job: Job) {
                 var indirect_object_identifier_type: String
                 var indirect_object_code_identity: String
                 var flags: String
+                var pid: String
+                var pid_version: String
                 
                 guard let queryService = sqlite3_column_text(queryStatement, 0) else {
                     return
@@ -143,6 +145,25 @@ func listTCCDatabase(job: Job) {
                 guard let queryLastModified = sqlite3_column_text(queryStatement, 12) else {
                     return
                 }
+                if let queryPid = sqlite3_column_text(queryStatement, 13) {
+                    pid = String(cString: queryPid)
+
+                }
+                else {
+                    pid = "<NULL>"
+                }
+                if let queryPidVersion = sqlite3_column_text(queryStatement, 14) {
+                    pid_version = String(cString: queryPidVersion)
+                }
+                else {
+                    pid_version = "<NULL>"
+                }
+                guard let queryBootUuid = sqlite3_column_text(queryStatement, 15) else {
+                    return
+                }
+                guard let queryLastReminded = sqlite3_column_text(queryStatement, 16) else {
+                    return
+                }
                 
                 let service = String(cString: queryService)
                 let client = String(cString: queryClient)
@@ -195,7 +216,7 @@ func listTCCDatabase(job: Job) {
                     auth_reason = "Override Policy"
                 }
                 else if auth_reason == "8" {
-                    auth_reason = "MIssing Usage String"
+                    auth_reason = "Missing Usage String"
                 }
                 else if auth_reason == "9" {
                     auth_reason = "Prompt Timeout"
@@ -218,8 +239,12 @@ func listTCCDatabase(job: Job) {
                 let dayTimePeriodFormatter = DateFormatter()
                 dayTimePeriodFormatter.dateFormat = "MMM dd YYYY hh:mm a"
                 last_modified = dayTimePeriodFormatter.string(from: date as Date)
+
+                var boot_uuid = String(cString: queryBootUuid)
+                var last_reminded = String(cString: queryLastReminded)
                 
-                job.result += "\(service) | \(client) | \(client_type) | \(auth_value) | \(auth_reason) | \(auth_version) | \(csreq) | \(policy_id) | \(indirect_object_identifier_type) | \(indirect_object_identifier) | \(indirect_object_code_identity) | \(flags) | \(last_modified)\n"
+                
+                job.result += "\(service) | \(client) | \(client_type) | \(auth_value) | \(auth_reason) | \(auth_version) | \(csreq) | \(policy_id) | \(indirect_object_identifier_type) | \(indirect_object_identifier) | \(indirect_object_code_identity) | \(flags) | \(last_modified) | \(pid) | \(pid_version) | \(boot_uuid) | \(last_reminded)\n"
             }
         } else {
             let errorMessage = String(cString: sqlite3_errmsg(db))

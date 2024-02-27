@@ -1,4 +1,5 @@
 function(task, responses){
+    console.log(task)
     if(task.status.includes("error")){
         const combined = responses.reduce( (prev, cur) => {
             return prev + cur;

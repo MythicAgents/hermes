@@ -88,7 +88,7 @@ func ls(job: Job) {
                         
                         // Determine access_time, modify_time, and size
                         // Return blank access time, we will return modify_time within permissions JSON
-                        let accessTime = ""
+                        let accessTime = 0
                         let modifyTime = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970 * 1000
                         let size = attributes[FileAttributeKey.size] as! UInt64
                         
@@ -189,7 +189,7 @@ func ls(job: Job) {
             jsonResult["name"].stringValue = displayName
         }
         
-        jsonResult["access_time"].stringValue = ""
+        jsonResult["access_time"].uInt64Value = 0
         jsonResult["size"].uInt64Value = attributes[FileAttributeKey.size] as! UInt64
         jsonResult["modify_time"].doubleValue = (attributes[FileAttributeKey.modificationDate] as! Date).timeIntervalSince1970 * 1000
     

@@ -78,11 +78,22 @@ func ps(job: Job) {
         let workspace = NSWorkspace.shared
         let applications = workspace.runningApplications
         let arch = applications[0].executableArchitecture
-        var machoArch = "Unknown Architecture"
-        if (arch == NSBundleExecutableArchitectureX86_64)
-        {
+        var machoArch: String
+        switch arch {
+        case NSBundleExecutableArchitectureARM64:
+            machoArch = "x64 ARM"
+        case NSBundleExecutableArchitectureI386:
+            machoArch = "x86 Intel"
+        case NSBundleExecutableArchitectureX86_64:
             machoArch = "x64 Intel"
+        case NSBundleExecutableArchitecturePPC:
+            machoArch = "x86 PowerPC"
+        case NSBundleExecutableArchitecturePPC64:
+            machoArch = "x64 PowerPC"
+        default:
+            machoArch = "Unknown Architecture"
         }
+
         
         // Filter out if kernel struct returns process with no name
         if !processName2.isEmpty{

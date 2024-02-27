@@ -11,7 +11,7 @@ function(task, responses){
         	for(let i = 0; i < responses.length; i++){
         		try{
         			let screenshotData = JSON.parse(responses[i]);
-        			screenshots.push(screenshotData.file_id)
+        			screenshots.push(screenshotData.agent_file_id)
 				}catch(error){
         			if(responses[i] !== "file downloaded"){
         				errors.push(responses[i]);
