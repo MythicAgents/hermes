@@ -4,6 +4,7 @@ from mythic_container.MythicRPC import *
 from mythic_container.logging import logger
 import asyncio
 import os
+import sys
 from os import path, environ
 from distutils.dir_util import copy_tree
 import shutil
@@ -55,27 +56,53 @@ class Hermes(PayloadType):
         return stdout.decode(), stderr.decode(), proc.returncode 
 
     async def buildConfig(self):
-        # Copy backup config to config.swift
-        agent_config_bak_path = "/Mythic/hermes/agent_code/Hermes/config.swift.bak"
-        agent_config_path = "/Mythic/hermes/agent_code/Hermes/config.swift"
+        c2 = self.c2info[0]
+        profile = c2.get_c2profile()["name"]
+
+        # Copy backup config to config.swift, open it for reading, read data
+        agent_config_bak_path = "/Mythic/hermes/agent_code/Hermes/config-{profile}.swift.bak".format(profile=profile)
+        agent_config_path = "/Mythic/hermes/agent_code/Hermes/config-{profile}.swift".format(profile=profile)
         shutil.copyfile(agent_config_bak_path, agent_config_path)
+        config_file = open(agent_config_path, "rt")
+        data = config_file.read()
 
         # pull user agent, host header, and custom headers from c2info
         user_agent = ""
         host_header = ""
         http_headers = ""
 
+        # get c2 profile
+
+
+        data = data.replace("REPLACE_UUID", self.uuid)
         # parse user agent, host header, and custom headers
-        for key, val in self.c2info[0].get_parameters_dict().items():
+        for key, val in c2.get_parameters_dict().items():
             if key == "headers":
-                for item in val:
-                    if item == "User-Agent":
-                        user_agent = val[item]
-                    elif item == "Host":
-                        host_header = val[item]
+                hl = val
+                for key,value in hl.items():
+                    if "User-Agent" in key:
+                        user_agent = value
+                    elif "Host" in key:
+                        host_header = value
                     else:
-                        http_headers += f'"{item}":"{val[item]}",'
-        
+                        http_headers += f'"{key}"' + ":" + f'"{value}"' + ","#"key1":"value1","key2":"value2"
+            if key == "callback_host":
+                use_ssl = "false"
+                if "https" in val:
+                    use_ssl = "true"
+                data = data.replace("REPLACE_USE_SSL", use_ssl)
+            if key == "killdate":
+                data = data.replace("2099-01-01", val)
+
+        for key, val in c2.get_parameters_dict().items():
+            if key == "AESPSK":
+                data = data.replace("REPLACE_ENCODED_AES_KEY", val["enc_key"])
+            elif key == "callback_host":
+                data = data.replace("REPLACE_CALLBACK_HOST", (val).replace("https://","").replace("http://",""))
+            else:
+                data = data.replace("REPLACE_" +key.upper(), str(val)) 
+
+
         # if no extra headers, create empty array in Swift
         if not http_headers:
             http_headers = ":"
@@ -83,55 +110,27 @@ class Hermes(PayloadType):
         if http_headers[-1] == ",":
             http_headers = http_headers[:-1]
 
-        # check if callback host is using SSL
-        use_ssl = "false"
-        if "https" in self.c2info[0].get_parameters_dict()["callback_host"]:
-            use_ssl = "true"
 
-        # open config file and update variables
-        replacements = {
-            "REPLACE_PAYLOAD_UUID": self.uuid,
-            "REPLACE_ENCODED_AES_KEY": self.c2info[0].get_parameters_dict()["AESPSK"]["enc_key"],
-            "REPLACE_CALLBACK_HOST": (self.c2info[0].get_parameters_dict()["callback_host"]).replace("https://","").replace("http://",""),
-            "REPLACE_GET_REQUEST_URI": "/" + self.c2info[0].get_parameters_dict()["get_uri"],
-            "REPLACE_POST_REQUEST_URI": "/" + self.c2info[0].get_parameters_dict()["post_uri"],
-            "REPLACE_CALLBACK_PORT": self.c2info[0].get_parameters_dict()["callback_port"],
-            "REPLACE_QUERY_PARAMETER": self.c2info[0].get_parameters_dict()["query_path_name"],
-            "REPLACE_SLEEP": self.c2info[0].get_parameters_dict()["callback_interval"],
-            "REPLACE_JITTER": self.c2info[0].get_parameters_dict()["callback_jitter"],
-            "REPLACE_KILL_DATE": self.c2info[0].get_parameters_dict()["killdate"],
-            "REPLACE_USER_AGENT": user_agent,
-            "REPLACE_HOST_HEADER": host_header,
-            "REPLACE_USE_SSL": use_ssl,
-            "REPLACE_HTTP_HEADERS": http_headers
-        }
-        
-        config_file = open(agent_config_path, "rt")
-        data = config_file.read()
-        for key, value in replacements.items():
-            data = data.replace(key, str(value))
+        # loop through file, replace config
+        data = data.replace("REPLACE_USER_AGENT", user_agent)
+        data = data.replace("REPLACE_HOST_HEADER", host_header)
+        data = data.replace("REPLACE_HTTP_HEADERS", http_headers)
+
+
+        config_file.close()
+         
+        # overwrite the input file
+        config_file = open(agent_config_path, "wt")
+        config_file.write(data)
         config_file.close()
 
-        for key in replacements.keys():
-            if key in data:
-                await SendMythicRPCPayloadUpdatebuildStep(MythicRPCPayloadUpdateBuildStepMessage(
-                    PayloadUUID=self.uuid,
-                    StepName="Configure Hermes",
-                    StepStdout="Detected {} in config file, erroring out".format(key),
-                    StepSuccess=False
-                )) 
+
         await SendMythicRPCPayloadUpdatebuildStep(MythicRPCPayloadUpdateBuildStepMessage(
             PayloadUUID=self.uuid,
             StepName="Configure Hermes",
             StepStdout="Hermes configuration populated successfully",
             StepSuccess=True
         )) 
-
-        
-        # overwrite the input file
-        config_file = open(agent_config_path, "wt")
-        config_file.write(data)
-        config_file.close()
 
 
     async def build(self) -> BuildResponse:
@@ -187,7 +186,7 @@ class Hermes(PayloadType):
             # trigger different architecture builds here
             if target_architecture == "x86_64" or target_architecture == "arm64":
                 command = ('darling {darling_bash} -c "export SDKROOT={clt_path}{sdk_root}; xcode-select -s {clt_path}; '
-                           '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* '
+                           '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/*.swift '
                            '-o hermes_{arch} -target {arch}-apple-macosx{version}"'
                            .format(darling_bash=darling_bash, clt_path=clt_path, sdk_root=sdk_root, swiftc_path=swiftc_path, arch=target_architecture, version=supported_macos))
 
@@ -232,13 +231,13 @@ class Hermes(PayloadType):
             
             elif target_architecture == "universal":
                 command_x86_64 = ('darling {darling_bash} -c "export SDKROOT={clt_path}{sdk_root}; xcode-select -s {clt_path}; '
-                    '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* '
+                    '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h crypto.swift main.swift helper.swift jobs_manager.swift {profile}.swift config-{profile}.swift commands/* swift_libraries/*.swift '
                     '-o hermes_x86_64 -target x86_64-apple-macosx{version}"'
-                    .format(darling_bash=darling_bash, clt_path=clt_path, sdk_root=sdk_root, swiftc_path=swiftc_path, version=supported_macos))
+                    .format(darling_bash=darling_bash, clt_path=clt_path, sdk_root=sdk_root, swiftc_path=swiftc_path, version=supported_macos, profile=profile))
                 command_arm64 = ('darling {darling_bash} -c "export SDKROOT={clt_path}{sdk_root}; xcode-select -s {clt_path}; '
-                    '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h *.swift commands/* swift_libraries/* '
+                    '{clt_path}{swiftc_path} -swift-version 5 -import-objc-header Hermes-Bridging-Header.h crypto.swift main.swift helper.swift jobs_manager.swift {profile}.swift config-{profile}.swift commands/* swift_libraries/*.swift '
                     '-o hermes_arm64 -target arm64-apple-macosx{version}"'
-                    .format(darling_bash=darling_bash, clt_path=clt_path, sdk_root=sdk_root, swiftc_path=swiftc_path, version=supported_macos))
+                    .format(darling_bash=darling_bash, clt_path=clt_path, sdk_root=sdk_root, swiftc_path=swiftc_path, version=supported_macos, profile=profile))
 
                 stdout_x86_64, stderr_x86_64, retcode_x86_64 = await self.run(command_x86_64, hermes_path)
                 stdout_arm64, stderr_arm64, retcode_arm64 = await self.run(command_arm64, hermes_path)

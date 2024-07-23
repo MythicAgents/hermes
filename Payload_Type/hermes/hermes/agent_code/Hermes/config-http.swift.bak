@@ -30,20 +30,20 @@ struct AgentConfig {
 }
 
 var agentConfig = AgentConfig(
-    payloadUUID: "REPLACE_PAYLOAD_UUID",
+    payloadUUID: "REPLACE_UUID",
     encodedAESKey: "REPLACE_ENCODED_AES_KEY",
     
     callbackHost: "REPLACE_CALLBACK_HOST",
-    getRequestURI: "REPLACE_GET_REQUEST_URI",
-    postRequestURI: "REPLACE_POST_REQUEST_URI",
+    getRequestURI: "/REPLACE_GET_URI",
+    postRequestURI: "/REPLACE_POST_URI",
     callbackPort: REPLACE_CALLBACK_PORT,
     userAgent: "REPLACE_USER_AGENT",
     hostHeader: "REPLACE_HOST_HEADER",
     useSSL: REPLACE_USE_SSL,
-    queryParameter: "REPLACE_QUERY_PARAMETER",
+    queryParameter: "REPLACE_QUERY_PATH_NAME",
     httpHeaders: [REPLACE_HTTP_HEADERS],
     
-    sleep: REPLACE_SLEEP,
-    jitter: REPLACE_JITTER,
-    killDate: "REPLACE_KILL_DATE"
+    sleep: REPLACE_CALLBACK_INTERVAL,
+    jitter: REPLACE_CALLBACK_JITTER,
+    killDate: "2099-01-01"
 )

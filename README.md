@@ -55,6 +55,8 @@ jxa_call | `jxa_call [function]` | Execute JXA functions from an uploaded script
 jxa_import | `jxa_import` | Use modal popup to upload JXA script into agent memory, call functions with `jxa_call`
 list_apps | `list_apps` | List running applications with `NSApplication.RunningApplications`
 list_tcc | `list_tcc [TCC.db file]` | Lists entries in TCC database (requires Full Disk Access). Schema currently only supports Big Sur
+login_item_add | `login_item_add [file path]` | Add the file path as a login item for persistence
+login_item_remove | `login_item_add [file path]` | Add the file path as a login item for persistence
 ls | `ls [path]` | List files and folders for a directory. Use `ls .` for current directory
 mkdir | `mkdir [directory]` | Create a directory
 mv | `mv [source] [destination]` | Move a file from source to destination
@@ -67,6 +69,7 @@ screenshot | `screenshot` | Capture all connected displays in-memory and send it
 setenv | `setenv [name] [value]` | Set an environment variable, will overwrite existing
 shell | `shell [command]` | Execute a shell command with `/bin/bash -c`
 sleep | `sleep [seconds] [percentage]` | Set the callback interval of the agent in seconds with a percentage for jitter
+socks | `socks [stop,start] [port]` | Start, or stop socks proxy on the specified port
 tcc_folder_checker | `tcc_folder_checker` | Use mdquery API to check access to TCC-protected folders: `~/Downloads`, `~/Desktop`, `~/Documents`
 unsetenv | `unsetenv [name]` | Unset an environment variable
 upload | `upload` | Use modal popup to upload a file to a remote path on the target

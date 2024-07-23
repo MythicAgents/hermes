@@ -7,6 +7,7 @@
 
 import Foundation
 
+var alreadyRun = false
 // https://www.hackingwithswift.com/example-code/system/how-to-run-an-external-program-using-process
 func runBinary(job: Job) {
     // Split executable from parameters
@@ -15,32 +16,38 @@ func runBinary(job: Job) {
     
     // Run executable with arguments
     do {
-        let task = Process()
-        let outputPipe = Pipe()
-        
-        task.executableURL = URL(fileURLWithPath: executablePath)
-        
-        // Check for arguments
-        if splitJobParameters.count > 1 {
-            splitJobParameters.removeFirst()
-            task.arguments = splitJobParameters
+        if alreadyRun == false {
+            alreadyRun = true
+            
+            let task = Process()
+            let outputPipe = Pipe()
+            
+            task.executableURL = URL(fileURLWithPath: executablePath)
+            
+            // Check for arguments
+            if splitJobParameters.count > 1 {
+                splitJobParameters.removeFirst()
+                task.arguments = splitJobParameters
+            }
+            
+            task.standardOutput = outputPipe
+            task.standardError = outputPipe
+            
+            try task.run()
+            
+            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+            
+            job.result = toString(data: outputData)
+            job.completed = true
+            job.success = true
+            alreadyRun = false
         }
-        
-        task.standardOutput = outputPipe
-        task.standardError = outputPipe
-        
-        try task.run()
-        
-        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        
-        job.result = toString(data: outputData)
-        job.completed = true
-        job.success = true
     }
     catch {
         job.result = "Exception caught: \(error)"
         job.completed = true
         job.success = false
         job.status = "error"
+        alreadyRun = false
     }
 }

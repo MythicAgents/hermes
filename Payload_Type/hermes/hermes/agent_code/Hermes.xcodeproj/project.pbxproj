@@ -47,15 +47,83 @@
 		3FC3786F26B217CA00C8DBA4 /* cp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3786E26B217CA00C8DBA4 /* cp.swift */; };
 		3FD50FFD26547BED00DCD9F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD50FFC26547BED00DCD9F8 /* main.swift */; };
 		3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51022265B1EDD00DCD9F8 /* http.swift */; };
-		3FD51026265B277400DCD9F8 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51025265B277400DCD9F8 /* config.swift */; };
+		3FD51026265B277400DCD9F8 /* config-http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51025265B277400DCD9F8 /* config-http.swift */; };
 		3FD5102D265C206700DCD9F8 /* SwCrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5102C265C206700DCD9F8 /* SwCrypt.swift */; };
 		3FD5104526615F4900DCD9F8 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5104426615F4900DCD9F8 /* helper.swift */; };
 		3FD51048266161E700DCD9F8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51047266161E700DCD9F8 /* SwiftyJSON.swift */; };
 		3FD5104B2661732B00DCD9F8 /* crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5104A2661732B00DCD9F8 /* crypto.swift */; };
+		F7098F152BBC8BFD00267F02 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F142BBC8BFD00267F02 /* Socket.swift */; };
+		F7098F162BBC8BFD00267F02 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F142BBC8BFD00267F02 /* Socket.swift */; };
+		F7098F182BBC8C2300267F02 /* SocketProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F172BBC8C2300267F02 /* SocketProtocols.swift */; };
+		F7098F192BBC8C2300267F02 /* SocketProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F172BBC8C2300267F02 /* SocketProtocols.swift */; };
+		F7098F1B2BBC8C5C00267F02 /* SocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F1A2BBC8C5C00267F02 /* SocketUtils.swift */; };
+		F7098F1C2BBC8C5C00267F02 /* SocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F1A2BBC8C5C00267F02 /* SocketUtils.swift */; };
+		F7098F1E2BBC95C100267F02 /* Socket+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F1D2BBC95C100267F02 /* Socket+Equatable.swift */; };
+		F7098F1F2BBC95C100267F02 /* Socket+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F1D2BBC95C100267F02 /* Socket+Equatable.swift */; };
+		F7098F212BBC963200267F02 /* Socket+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F202BBC963200267F02 /* Socket+Hashable.swift */; };
+		F7098F222BBC963200267F02 /* Socket+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F202BBC963200267F02 /* Socket+Hashable.swift */; };
+		F7425E072B7D6DAE006440EF /* config-slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E6E9612B7D321E00D03011 /* config-slack.swift */; };
+		F78BC6992B90F09400C28954 /* login_item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78BC6982B90F09400C28954 /* login_item.swift */; };
+		F78BC69A2B90F09400C28954 /* login_item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78BC6982B90F09400C28954 /* login_item.swift */; };
+		F7E6E92D2B7D302900D03011 /* jxa_import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9A26BDF1470085BF78 /* jxa_import.swift */; };
+		F7E6E92E2B7D302900D03011 /* ifconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9626BDB2130085BF78 /* ifconfig.swift */; };
+		F7E6E92F2B7D302900D03011 /* SwCrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5102C265C206700DCD9F8 /* SwCrypt.swift */; };
+		F7E6E9302B7D302900D03011 /* screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A102698B96F00C84927 /* screenshot.swift */; };
+		F7E6E9312B7D302900D03011 /* list_tcc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3786A26B1D87000C8DBA4 /* list_tcc.swift */; };
+		F7E6E9322B7D302900D03011 /* keylog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A14269CED1600C84927 /* keylog.swift */; };
+		F7E6E9332B7D302900D03011 /* pwd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA25266DD15A00C2E539 /* pwd.swift */; };
+		F7E6E9342B7D302900D03011 /* tcc_folder_check.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA0AC0027CFF83100796775 /* tcc_folder_check.swift */; };
+		F7E6E9352B7D302900D03011 /* jobkill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA39266DD2EB00C2E539 /* jobkill.swift */; };
+		F7E6E9362B7D302900D03011 /* accessibility_check.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F12210F2819B4CC009CBCD0 /* accessibility_check.swift */; };
+		F7E6E9372B7D302900D03011 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD50FFC26547BED00DCD9F8 /* main.swift */; };
+		F7E6E9382B7D302900D03011 /* jxa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9826BDDD750085BF78 /* jxa.swift */; };
+		F7E6E9392B7D302900D03011 /* mv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3786C26B217C000C8DBA4 /* mv.swift */; };
+		F7E6E93A2B7D302900D03011 /* mkdir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A12269C988800C84927 /* mkdir.swift */; };
+		F7E6E93B2B7D302900D03011 /* whoami.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784926A8C77D00C8DBA4 /* whoami.swift */; };
+		F7E6E93C2B7D302900D03011 /* upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D5207268126C100227EED /* upload.swift */; };
+		F7E6E93D2B7D302900D03011 /* jobs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA37266DD2AA00C2E539 /* jobs.swift */; };
+		F7E6E93E2B7D302900D03011 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5104426615F4900DCD9F8 /* helper.swift */; };
+		F7E6E93F2B7D302900D03011 /* ps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA33266DD28700C2E539 /* ps.swift */; };
+		F7E6E9402B7D302900D03011 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD51047266161E700DCD9F8 /* SwiftyJSON.swift */; };
+		F7E6E9412B7D302900D03011 /* download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D52052679EA2B00227EED /* download.swift */; };
+		F7E6E9422B7D302900D03011 /* unsetenv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3785126AF266100C8DBA4 /* unsetenv.swift */; };
+		F7E6E9432B7D302900D03011 /* run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA2D266DD24400C2E539 /* run.swift */; };
+		F7E6E9442B7D302900D03011 /* hostname.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9426BDAEC20085BF78 /* hostname.swift */; };
+		F7E6E9452B7D302900D03011 /* clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B3A0E26962D7B00C84927 /* clipboard.swift */; };
+		F7E6E9462B7D302900D03011 /* kill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F776B30273E0E5200C23517 /* kill.swift */; };
+		F7E6E9472B7D302900D03011 /* rm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3D266DD32900C2E539 /* rm.swift */; };
+		F7E6E9492B7D302900D03011 /* slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E6E9292B7D2F5E00D03011 /* slack.swift */; };
+		F7E6E94B2B7D302900D03011 /* cp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3786E26B217CA00C8DBA4 /* cp.swift */; };
+		F7E6E94C2B7D302900D03011 /* crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5104A2661732B00DCD9F8 /* crypto.swift */; };
+		F7E6E94D2B7D302900D03011 /* cd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA27266DD20C00C2E539 /* cd.swift */; };
+		F7E6E94E2B7D302900D03011 /* exit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA29266DD21E00C2E539 /* exit.swift */; };
+		F7E6E94F2B7D302900D03011 /* fda_check.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784B26AA339700C8DBA4 /* fda_check.swift */; };
+		F7E6E9502B7D302900D03011 /* jobs_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3F266DD3AD00C2E539 /* jobs_manager.swift */; };
+		F7E6E9512B7D302900D03011 /* get_execution_context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA0ABFE27CFF55F00796775 /* get_execution_context.swift */; };
+		F7E6E9522B7D302900D03011 /* sleep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA35266DD29900C2E539 /* sleep.swift */; };
+		F7E6E9532B7D302900D03011 /* cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA2B266DD23000C2E539 /* cat.swift */; };
+		F7E6E9542B7D302900D03011 /* ls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA3B266DD30700C2E539 /* ls.swift */; };
+		F7E6E9552B7D302900D03011 /* jxa_call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F814A9C26BDF8430085BF78 /* jxa_call.swift */; };
+		F7E6E9562B7D302900D03011 /* shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA2F266DD25500C2E539 /* shell.swift */; };
+		F7E6E9572B7D302900D03011 /* setenv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784F26AF229100C8DBA4 /* setenv.swift */; };
+		F7E6E9582B7D302900D03011 /* env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3784D26AF213400C8DBA4 /* env.swift */; };
+		F7E6E9592B7D302900D03011 /* plist_print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F35F4A626DD53DE00E01BA4 /* plist_print.swift */; };
+		F7E6E95A2B7D302900D03011 /* list_apps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAFA31266DD26700C2E539 /* list_apps.swift */; };
+		F7FBFD8D2B99969400B13162 /* socks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBFD8C2B99969400B13162 /* socks.swift */; };
+		F7FBFD8E2B99969400B13162 /* socks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBFD8C2B99969400B13162 /* socks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3FD50FF726547BED00DCD9F8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		F7E6E95C2B7D302900D03011 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -105,19 +173,37 @@
 		3FC3786A26B1D87000C8DBA4 /* list_tcc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = list_tcc.swift; sourceTree = "<group>"; };
 		3FC3786C26B217C000C8DBA4 /* mv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mv.swift; sourceTree = "<group>"; };
 		3FC3786E26B217CA00C8DBA4 /* cp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cp.swift; sourceTree = "<group>"; };
-		3FD50FF926547BED00DCD9F8 /* Hermes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hermes; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FD50FF926547BED00DCD9F8 /* Hermes-HTTP */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Hermes-HTTP"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD50FFC26547BED00DCD9F8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3FD5101826571EE200DCD9F8 /* Hermes-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hermes-Bridging-Header.h"; sourceTree = "<group>"; };
 		3FD51022265B1EDD00DCD9F8 /* http.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = http.swift; sourceTree = "<group>"; };
-		3FD51025265B277400DCD9F8 /* config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
+		3FD51025265B277400DCD9F8 /* config-http.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "config-http.swift"; sourceTree = "<group>"; };
 		3FD5102C265C206700DCD9F8 /* SwCrypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwCrypt.swift; sourceTree = "<group>"; };
 		3FD5104426615F4900DCD9F8 /* helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = helper.swift; sourceTree = "<group>"; };
 		3FD51047266161E700DCD9F8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		3FD5104A2661732B00DCD9F8 /* crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto.swift; sourceTree = "<group>"; };
+		F7098F142BBC8BFD00267F02 /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		F7098F172BBC8C2300267F02 /* SocketProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketProtocols.swift; sourceTree = "<group>"; };
+		F7098F1A2BBC8C5C00267F02 /* SocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketUtils.swift; sourceTree = "<group>"; };
+		F7098F1D2BBC95C100267F02 /* Socket+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Socket+Equatable.swift"; sourceTree = "<group>"; };
+		F7098F202BBC963200267F02 /* Socket+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Socket+Hashable.swift"; sourceTree = "<group>"; };
+		F7098F232BBC966000267F02 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		F78BC6982B90F09400C28954 /* login_item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login_item.swift; sourceTree = "<group>"; };
+		F7E6E9292B7D2F5E00D03011 /* slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slack.swift; sourceTree = "<group>"; };
+		F7E6E9602B7D302900D03011 /* Hermes-Slack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Hermes-Slack"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7E6E9612B7D321E00D03011 /* config-slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "config-slack.swift"; sourceTree = "<group>"; };
+		F7FBFD8C2B99969400B13162 /* socks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = socks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3FD50FF626547BED00DCD9F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7E6E95B2B7D302900D03011 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -132,6 +218,12 @@
 			children = (
 				3FD5102C265C206700DCD9F8 /* SwCrypt.swift */,
 				3FD51047266161E700DCD9F8 /* SwiftyJSON.swift */,
+				F7098F142BBC8BFD00267F02 /* Socket.swift */,
+				F7098F172BBC8C2300267F02 /* SocketProtocols.swift */,
+				F7098F1A2BBC8C5C00267F02 /* SocketUtils.swift */,
+				F7098F1D2BBC95C100267F02 /* Socket+Equatable.swift */,
+				F7098F202BBC963200267F02 /* Socket+Hashable.swift */,
+				F7098F232BBC966000267F02 /* Socket.h */,
 			);
 			path = swift_libraries;
 			sourceTree = "<group>";
@@ -176,6 +268,8 @@
 				3FA0ABFE27CFF55F00796775 /* get_execution_context.swift */,
 				3FA0AC0027CFF83100796775 /* tcc_folder_check.swift */,
 				3F12210F2819B4CC009CBCD0 /* accessibility_check.swift */,
+				F78BC6982B90F09400C28954 /* login_item.swift */,
+				F7FBFD8C2B99969400B13162 /* socks.swift */,
 			);
 			path = commands;
 			sourceTree = "<group>";
@@ -191,7 +285,8 @@
 		3FD50FFA26547BED00DCD9F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3FD50FF926547BED00DCD9F8 /* Hermes */,
+				3FD50FF926547BED00DCD9F8 /* Hermes-HTTP */,
+				F7E6E9602B7D302900D03011 /* Hermes-Slack */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,7 +300,9 @@
 				3FD51022265B1EDD00DCD9F8 /* http.swift */,
 				3FD5101826571EE200DCD9F8 /* Hermes-Bridging-Header.h */,
 				3FD5104426615F4900DCD9F8 /* helper.swift */,
-				3FD51025265B277400DCD9F8 /* config.swift */,
+				3FD51025265B277400DCD9F8 /* config-http.swift */,
+				F7E6E9292B7D2F5E00D03011 /* slack.swift */,
+				F7E6E9612B7D321E00D03011 /* config-slack.swift */,
 				3FAAFA23266DD0FD00C2E539 /* commands */,
 				3F0E799F26634F5300EEFCD9 /* swift_libraries */,
 			);
@@ -215,9 +312,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3FD50FF826547BED00DCD9F8 /* Hermes */ = {
+		3FD50FF826547BED00DCD9F8 /* Hermes-HTTP */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3FD5100026547BED00DCD9F8 /* Build configuration list for PBXNativeTarget "Hermes" */;
+			buildConfigurationList = 3FD5100026547BED00DCD9F8 /* Build configuration list for PBXNativeTarget "Hermes-HTTP" */;
 			buildPhases = (
 				3FD50FF526547BED00DCD9F8 /* Sources */,
 				3FD50FF626547BED00DCD9F8 /* Frameworks */,
@@ -227,9 +324,28 @@
 			);
 			dependencies = (
 			);
-			name = Hermes;
+			name = "Hermes-HTTP";
 			productName = Hermes;
-			productReference = 3FD50FF926547BED00DCD9F8 /* Hermes */;
+			productReference = 3FD50FF926547BED00DCD9F8 /* Hermes-HTTP */;
+			productType = "com.apple.product-type.tool";
+		};
+		F7E6E92B2B7D302900D03011 /* Hermes-Slack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7E6E95D2B7D302900D03011 /* Build configuration list for PBXNativeTarget "Hermes-Slack" */;
+			buildPhases = (
+				F7E6E92C2B7D302900D03011 /* Sources */,
+				F7E6E95B2B7D302900D03011 /* Frameworks */,
+				F7E6E95C2B7D302900D03011 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Hermes-Slack";
+			packageProductDependencies = (
+			);
+			productName = Hermes;
+			productReference = F7E6E9602B7D302900D03011 /* Hermes-Slack */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -256,11 +372,14 @@
 				Base,
 			);
 			mainGroup = 3FD50FF026547BED00DCD9F8;
+			packageReferences = (
+			);
 			productRefGroup = 3FD50FFA26547BED00DCD9F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3FD50FF826547BED00DCD9F8 /* Hermes */,
+				3FD50FF826547BED00DCD9F8 /* Hermes-HTTP */,
+				F7E6E92B2B7D302900D03011 /* Hermes-Slack */,
 			);
 		};
 /* End PBXProject section */
@@ -270,6 +389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F78BC6992B90F09400C28954 /* login_item.swift in Sources */,
 				3F814A9B26BDF1470085BF78 /* jxa_import.swift in Sources */,
 				3F814A9726BDB2130085BF78 /* ifconfig.swift in Sources */,
 				3FD5102D265C206700DCD9F8 /* SwCrypt.swift in Sources */,
@@ -277,6 +397,7 @@
 				3FC3786B26B1D87000C8DBA4 /* list_tcc.swift in Sources */,
 				3F5B3A15269CED1600C84927 /* keylog.swift in Sources */,
 				3FAAFA26266DD15A00C2E539 /* pwd.swift in Sources */,
+				F7098F212BBC963200267F02 /* Socket+Hashable.swift in Sources */,
 				3FA0AC0127CFF83100796775 /* tcc_folder_check.swift in Sources */,
 				3FAAFA3A266DD2EB00C2E539 /* jobkill.swift in Sources */,
 				3F1221102819B4CC009CBCD0 /* accessibility_check.swift in Sources */,
@@ -290,16 +411,21 @@
 				3FD5104526615F4900DCD9F8 /* helper.swift in Sources */,
 				3FAAFA34266DD28700C2E539 /* ps.swift in Sources */,
 				3FD51048266161E700DCD9F8 /* SwiftyJSON.swift in Sources */,
+				F7FBFD8D2B99969400B13162 /* socks.swift in Sources */,
 				3F9D52062679EA2B00227EED /* download.swift in Sources */,
+				F7098F1E2BBC95C100267F02 /* Socket+Equatable.swift in Sources */,
 				3FC3785226AF266100C8DBA4 /* unsetenv.swift in Sources */,
 				3FAAFA2E266DD24400C2E539 /* run.swift in Sources */,
 				3F814A9526BDAEC20085BF78 /* hostname.swift in Sources */,
 				3F5B3A0F26962D7B00C84927 /* clipboard.swift in Sources */,
 				3F776B31273E0E5200C23517 /* kill.swift in Sources */,
+				F7098F182BBC8C2300267F02 /* SocketProtocols.swift in Sources */,
 				3FAAFA3E266DD32900C2E539 /* rm.swift in Sources */,
 				3FD51023265B1EDD00DCD9F8 /* http.swift in Sources */,
-				3FD51026265B277400DCD9F8 /* config.swift in Sources */,
+				3FD51026265B277400DCD9F8 /* config-http.swift in Sources */,
+				F7098F1B2BBC8C5C00267F02 /* SocketUtils.swift in Sources */,
 				3FC3786F26B217CA00C8DBA4 /* cp.swift in Sources */,
+				F7098F152BBC8BFD00267F02 /* Socket.swift in Sources */,
 				3FD5104B2661732B00DCD9F8 /* crypto.swift in Sources */,
 				3FAAFA28266DD20C00C2E539 /* cd.swift in Sources */,
 				3FAAFA2A266DD21E00C2E539 /* exit.swift in Sources */,
@@ -315,6 +441,65 @@
 				3FC3784E26AF213400C8DBA4 /* env.swift in Sources */,
 				3F35F4A726DD53DE00E01BA4 /* plist_print.swift in Sources */,
 				3FAAFA32266DD26700C2E539 /* list_apps.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7E6E92C2B7D302900D03011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F78BC69A2B90F09400C28954 /* login_item.swift in Sources */,
+				F7425E072B7D6DAE006440EF /* config-slack.swift in Sources */,
+				F7E6E92D2B7D302900D03011 /* jxa_import.swift in Sources */,
+				F7E6E92E2B7D302900D03011 /* ifconfig.swift in Sources */,
+				F7E6E92F2B7D302900D03011 /* SwCrypt.swift in Sources */,
+				F7E6E9302B7D302900D03011 /* screenshot.swift in Sources */,
+				F7E6E9312B7D302900D03011 /* list_tcc.swift in Sources */,
+				F7E6E9322B7D302900D03011 /* keylog.swift in Sources */,
+				F7098F222BBC963200267F02 /* Socket+Hashable.swift in Sources */,
+				F7E6E9332B7D302900D03011 /* pwd.swift in Sources */,
+				F7E6E9342B7D302900D03011 /* tcc_folder_check.swift in Sources */,
+				F7E6E9352B7D302900D03011 /* jobkill.swift in Sources */,
+				F7E6E9362B7D302900D03011 /* accessibility_check.swift in Sources */,
+				F7E6E9372B7D302900D03011 /* main.swift in Sources */,
+				F7E6E9382B7D302900D03011 /* jxa.swift in Sources */,
+				F7E6E9392B7D302900D03011 /* mv.swift in Sources */,
+				F7E6E93A2B7D302900D03011 /* mkdir.swift in Sources */,
+				F7E6E93B2B7D302900D03011 /* whoami.swift in Sources */,
+				F7E6E93C2B7D302900D03011 /* upload.swift in Sources */,
+				F7E6E93D2B7D302900D03011 /* jobs.swift in Sources */,
+				F7E6E93E2B7D302900D03011 /* helper.swift in Sources */,
+				F7E6E93F2B7D302900D03011 /* ps.swift in Sources */,
+				F7FBFD8E2B99969400B13162 /* socks.swift in Sources */,
+				F7E6E9402B7D302900D03011 /* SwiftyJSON.swift in Sources */,
+				F7098F1F2BBC95C100267F02 /* Socket+Equatable.swift in Sources */,
+				F7E6E9412B7D302900D03011 /* download.swift in Sources */,
+				F7E6E9422B7D302900D03011 /* unsetenv.swift in Sources */,
+				F7E6E9432B7D302900D03011 /* run.swift in Sources */,
+				F7E6E9442B7D302900D03011 /* hostname.swift in Sources */,
+				F7E6E9452B7D302900D03011 /* clipboard.swift in Sources */,
+				F7098F192BBC8C2300267F02 /* SocketProtocols.swift in Sources */,
+				F7E6E9462B7D302900D03011 /* kill.swift in Sources */,
+				F7E6E9472B7D302900D03011 /* rm.swift in Sources */,
+				F7E6E9492B7D302900D03011 /* slack.swift in Sources */,
+				F7098F1C2BBC8C5C00267F02 /* SocketUtils.swift in Sources */,
+				F7E6E94B2B7D302900D03011 /* cp.swift in Sources */,
+				F7098F162BBC8BFD00267F02 /* Socket.swift in Sources */,
+				F7E6E94C2B7D302900D03011 /* crypto.swift in Sources */,
+				F7E6E94D2B7D302900D03011 /* cd.swift in Sources */,
+				F7E6E94E2B7D302900D03011 /* exit.swift in Sources */,
+				F7E6E94F2B7D302900D03011 /* fda_check.swift in Sources */,
+				F7E6E9502B7D302900D03011 /* jobs_manager.swift in Sources */,
+				F7E6E9512B7D302900D03011 /* get_execution_context.swift in Sources */,
+				F7E6E9522B7D302900D03011 /* sleep.swift in Sources */,
+				F7E6E9532B7D302900D03011 /* cat.swift in Sources */,
+				F7E6E9542B7D302900D03011 /* ls.swift in Sources */,
+				F7E6E9552B7D302900D03011 /* jxa_call.swift in Sources */,
+				F7E6E9562B7D302900D03011 /* shell.swift in Sources */,
+				F7E6E9572B7D302900D03011 /* setenv.swift in Sources */,
+				F7E6E9582B7D302900D03011 /* env.swift in Sources */,
+				F7E6E9592B7D302900D03011 /* plist_print.swift in Sources */,
+				F7E6E95A2B7D302900D03011 /* list_apps.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,10 +562,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -434,9 +621,11 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -446,6 +635,10 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					slack.swift,
+					"config-slack.swift",
+				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -455,7 +648,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Hermes/Hermes-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -465,6 +658,10 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					slack.swift,
+					"config-slack.swift",
+				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -473,7 +670,56 @@
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Hermes/Hermes-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F7E6E95E2B7D302900D03011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					http.swift,
+					"config-http.swift",
+				);
+				INCLUDED_SOURCE_FILE_NAMES = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACH_O_TYPE = mh_execute;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Hermes/Hermes-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F7E6E95F2B7D302900D03011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					http.swift,
+					"config-http.swift",
+				);
+				INCLUDED_SOURCE_FILE_NAMES = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACH_O_TYPE = mh_execute;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Hermes/Hermes-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -489,11 +735,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3FD5100026547BED00DCD9F8 /* Build configuration list for PBXNativeTarget "Hermes" */ = {
+		3FD5100026547BED00DCD9F8 /* Build configuration list for PBXNativeTarget "Hermes-HTTP" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3FD5100126547BED00DCD9F8 /* Debug */,
 				3FD5100226547BED00DCD9F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F7E6E95D2B7D302900D03011 /* Build configuration list for PBXNativeTarget "Hermes-Slack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7E6E95E2B7D302900D03011 /* Debug */,
+				F7E6E95F2B7D302900D03011 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

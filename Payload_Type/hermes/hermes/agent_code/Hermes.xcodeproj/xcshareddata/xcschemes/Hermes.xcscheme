@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3FD50FF826547BED00DCD9F8"
-               BuildableName = "Hermes"
-               BlueprintName = "Hermes"
+               BuildableName = "Hermes-HTTP"
+               BlueprintName = "Hermes-HTTP"
                ReferencedContainer = "container:Hermes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3FD50FF826547BED00DCD9F8"
-            BuildableName = "Hermes"
-            BlueprintName = "Hermes"
+            BuildableName = "Hermes-HTTP"
+            BlueprintName = "Hermes-HTTP"
             ReferencedContainer = "container:Hermes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3FD50FF826547BED00DCD9F8"
-            BuildableName = "Hermes"
-            BlueprintName = "Hermes"
+            BuildableName = "Hermes-HTTP"
+            BlueprintName = "Hermes-HTTP"
             ReferencedContainer = "container:Hermes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

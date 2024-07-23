@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import Network
 
 // https://stackoverflow.com/questions/26845307/generate-random-alphanumeric-string-in-swift/33860834
 func generateSessionID(length: Int) -> String {
@@ -214,4 +215,32 @@ extension Data {
 
         return prettyPrintedString
     }
+}
+
+//thanks quinn
+extension Data {
+
+    mutating func readByte() -> UInt8? {
+        guard let first = self.first else { return nil }
+        self.removeFirst()
+        return first
+    }
+
+    mutating func readBytes(count: Int) -> Data? {
+        guard self.count >= count else { return nil }
+        defer { self.removeFirst(count) }
+        return self.prefix(count)
+    }
+}
+
+func IPToInt(ip: String) -> Int {
+    let octets: [Int] = ip.split(separator: ".").map({Int($0)!})
+    var numValue: Int = 0
+    for i in stride(from:3, through:0, by:-1) {
+        numValue += octets[3-i] << (i * 8)
+    }
+    return numValue
+}
+func IntToIP(int: Int) -> String {
+    return String((int >> 24) & 0xFF) + "." + String((int >> 16) & 0xFF) + "." + String((int >> 8) & 0xFF) + "." + String(int & 0xFF)
 }

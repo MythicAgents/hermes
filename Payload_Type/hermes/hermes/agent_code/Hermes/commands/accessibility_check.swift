@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import ApplicationServices
+import SwiftUI
+
 
 func accessibilityCheck(job: Job) {
     if AXIsProcessTrusted() {

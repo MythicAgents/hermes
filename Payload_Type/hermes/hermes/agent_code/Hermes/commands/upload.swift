@@ -18,14 +18,15 @@ func upload(job: Job) {
         else if job.uploadTotalChunks > 1 && (job.uploadChunkNumber <= job.uploadTotalChunks) {
             let fileManager = FileManager.default
             let decodedData = fromBase64(data: job.uploadData)
-            
-            if fileManager.fileExists(atPath: job.uploadFullPath) && job.uploadChunkNumber == 2 {
-                // Delete file/folder
-                let fileURL = URL(fileURLWithPath: job.uploadFullPath)
-                try FileManager.default.removeItem(at: fileURL)
-                fileManager.createFile(atPath: job.uploadFullPath, contents: decodedData, attributes: nil)
-            }
-            else if !fileManager.fileExists(atPath: job.uploadFullPath) && job.uploadChunkNumber == 2 {
+            //print("Chunk num: " + String(job.uploadChunkNumber))
+            //print(decodedData.count)
+
+            if job.uploadChunkNumber == 1 {
+                if fileManager.fileExists(atPath: job.uploadFullPath) {
+                    let fileURL = URL(fileURLWithPath: job.uploadFullPath)
+                    try FileManager.default.removeItem(at: fileURL)
+                }
+                
                 fileManager.createFile(atPath: job.uploadFullPath, contents: decodedData, attributes: nil)
             }
             else {
@@ -33,19 +34,12 @@ func upload(job: Job) {
                 fileHandle?.seekToEndOfFile()
                 fileHandle?.write(decodedData)
                 fileHandle?.closeFile()
+                if job.uploadTotalChunks == job.uploadChunkNumber {
+                    job.result = "Upload of \(job.uploadFullPath) complete"
+                    job.completed = true
+                    job.success = true
+                }
             }
-        }
-        else if job.uploadTotalChunks < job.uploadChunkNumber {
-            let fileHandle = FileHandle(forWritingAtPath: job.uploadFullPath)
-            let decodedData = fromBase64(data: job.uploadData)
-            
-            fileHandle?.seekToEndOfFile()
-            fileHandle?.write(decodedData)
-            fileHandle?.closeFile()
-            
-            job.result = "Upload of \(job.uploadFullPath) complete"
-            job.completed = true
-            job.success = true
         }
     }
     catch {
